@@ -207,6 +207,7 @@
     .offline-badge { display:none; position:fixed; top:0; left:0; right:0; background:#ef4444; color:#fff; text-align:center; font-size:12px; padding:4px; z-index:300; }
     .offline-badge.show { display:block; }
   </style>
+<base target="_blank">
 </head>
 <body>
   <div class="offline-badge" id="offlineBadge">⚠️ Нет подключения к интернету</div>
@@ -441,9 +442,9 @@
         <h3>🔗 Привязать Telegram</h3>
         <p class="modal-desc">
           <b>Как узнать Chat ID:</b><br>
-          1. Найди бота <b>@userinfobot</b> в Telegram<br>
-          2. Напиши ему <b>/start</b><br>
-          3. Скопируй цифры из поля <b>ID</b><br>
+          1. Найди бота <b>@Raccoons_Diary_bot</b> в Telegram<br>
+          2. Напиши ему <b>/myid</b><br>
+          3. Скопируй цифры из ответа<br>
           4. Вставь сюда 👇
         </p>
         <input type="text" id="telegramChatId" placeholder="Введи Chat ID (например: 664054209)" />
@@ -459,7 +460,7 @@
     // ==================== CONFIG ====================
     const CONFIG = {
       SUPABASE_URL: 'https://rayhnludfxhzeaacjfco.supabase.co',
-      SUPABASE_ANON_KEY: 'sb_publishable_w_tY_r2JHCJ9P0i8vn35Tg_rPO0EPoI',
+      SUPABASE_ANON_KEY: 'ВСТАВЬ_СЮДА_ТВОЙ_ANON_KEY',
       API_URL: 'https://raccoon-s-diarybot.onrender.com'
     };
 
