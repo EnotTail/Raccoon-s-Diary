@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#3b82f6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Енотов Ежедневник">
+  <meta name="description" content="Персональный планер с трекингом задач, привычек и дневником">
+
+  <title>🦝 Енотов Ежедневник</title>
+
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="icon" type="image/png" href="./icons/icon-192.png">
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:#f5f5f7; color:#1a1a1a; min-height:100vh; overscroll-behavior-y:none; }
+    #app { max-width:420px; margin:0 auto; padding:0; min-height:100vh; position:relative; }
+
+    /* START SCREEN */
+    .start-screen { position:fixed; inset:0; background:linear-gradient(160deg, #f8faff 0%, #e8f0ff 50%, #f0e8ff 100%); z-index:200; display:flex; align-items:center; justify-content:center; padding:24px; animation:fadeIn 0.6s ease; }
+    .start-content { text-align:center; max-width:320px; }
+    .start-emoji { font-size:80px; margin-bottom:16px; animation:bounce 2s infinite; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    .start-title { font-size:32px; font-weight:800; color:#1a1a1a; line-height:1.15; margin-bottom:12px; letter-spacing:-0.5px; }
+    .start-subtitle { font-size:15px; color:#666; line-height:1.5; margin-bottom:32px; }
+    .start-btn { width:100%; padding:16px; background:#3b82f6; color:#fff; border:none; border-radius:16px; font-size:17px; font-weight:700; cursor:pointer; box-shadow:0 4px 16px rgba(59,130,246,0.35); transition:0.2s; margin-bottom:32px; }
+    .start-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(59,130,246,0.45); }
+    .start-btn:active { transform:translateY(0); }
+    .start-features { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .sf-item { background:rgba(255,255,255,0.7); backdrop-filter:blur(10px); padding:12px; border-radius:12px; font-size:13px; color:#555; border:1px solid rgba(255,255,255,0.5); }
+    .sf-item span { display:block; font-size:20px; margin-bottom:4px; }
+
+    /* MAIN APP */
+    .main-app { padding:12px; padding-bottom:80px; animation:fadeIn 0.3s ease; }
+    .main-app.hidden { display:none; }
+
+    .header { display:flex; align-items:center; justify-content:space-between; padding:4px 0 10px; }
+    .logo { font-size:16px; font-weight:700; color:#1a1a1a; }
+    .header-actions { display:flex; gap:6px; }
+    .icon-btn { width:36px; height:36px; border-radius:10px; background:#fff; border:1px solid #e0e0e5; color:#666; font-size:14px; cursor:pointer; transition:0.2s; display:flex; align-items:center; justify-content:center; }
+    .icon-btn:hover { background:#f0f0f5; color:#333; }
+    .icon-btn:active { transform:scale(0.95); }
+
+    .week-nav { display:flex; align-items:center; justify-content:center; gap:12px; padding:0 0 12px; }
+    .week-nav button { background:#fff; border:1px solid #e0e0e5; color:#666; width:32px; height:32px; border-radius:10px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
+    .week-nav button:hover { background:#f0f0f5; }
+    .week-nav button:active { transform:scale(0.9); }
+    .week-nav span { font-size:13px; color:#888; font-weight:500; }
+
+    .tabs { display:flex; gap:4px; background:#e8e8ed; padding:4px; border-radius:12px; margin-bottom:14px; }
+    .tab-btn { flex:1; background:transparent; border:none; color:#888; padding:10px 0; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; transition:0.2s; }
+    .tab-btn.active { background:#fff; color:#1a1a1a; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+
+    .tab-content { display:none; animation:fadeIn 0.25s ease; }
+    .tab-content.active { display:block; }
+    @keyframes fadeIn { from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+    .day-selector { display:flex; gap:4px; margin-bottom:12px; }
+    .day-pill { flex:1; background:#fff; border:1px solid #e0e0e5; color:#888; padding:10px 0; border-radius:10px; font-size:12px; font-weight:600; cursor:pointer; transition:0.2s; }
+    .day-pill.active { background:#3b82f6; color:#fff; border-color:#3b82f6; box-shadow:0 2px 8px rgba(59,130,246,0.3); }
+    .day-pill:hover:not(.active) { background:#f8f8fb; }
+    .day-pill:active { transform:scale(0.95); }
+
+    .day-date { text-align:center; font-size:15px; font-weight:600; color:#555; margin-bottom:14px; }
+
+    .progress-ring-wrap { position:relative; width:140px; height:140px; margin:0 auto 20px; }
+    .progress-ring { width:100%; height:100%; transform:rotate(-90deg); }
+    .progress-ring-bg { fill:none; stroke:#e8e8ed; stroke-width:10; }
+    .progress-ring-fill { fill:none; stroke:#3b82f6; stroke-width:10; stroke-linecap:round; transition:stroke-dashoffset 0.5s ease; }
+    .progress-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; }
+    .progress-text span { display:block; font-size:32px; font-weight:700; color:#1a1a1a; }
+    .progress-text small { font-size:11px; color:#999; }
+
+    .section-title { font-size:14px; font-weight:600; color:#888; margin:20px 0 10px; padding-left:4px; }
+
+    .task-list { display:flex; flex-direction:column; gap:8px; }
+    .task-item { display:flex; align-items:center; gap:12px; background:#fff; padding:14px; border-radius:14px; border:1px solid #e8e8ed; transition:0.15s; box-shadow:0 1px 3px rgba(0,0,0,0.03); }
+    .task-item:hover { border-color:#d0d0d8; }
+    .task-check { width:24px; height:24px; border:2px solid #ccc; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; transition:0.2s; }
+    .task-check.done { background:#22c55e; border-color:#22c55e; }
+    .task-check.done::after { content:'\2713'; color:#fff; font-size:14px; font-weight:700; }
+    .task-text { flex:1; font-size:15px; color:#333; transition:0.2s; }
+    .task-text.done { text-decoration:line-through; color:#bbb; }
+    .task-cat { font-size:11px; padding:4px 10px; border-radius:8px; background:#f0f0f5; color:#777; font-weight:500; }
+    .task-del { background:none; border:none; color:#ccc; font-size:20px; cursor:pointer; padding:4px; }
+    .task-del:hover { color:#ef4444; }
+    .task-del:active { transform:scale(0.9); }
+
+    .add-btn { width:100%; padding:14px; background:#fff; border:1.5px dashed #ccc; color:#999; border-radius:14px; font-size:15px; font-weight:600; cursor:pointer; margin-top:14px; transition:0.2s; }
+    .add-btn:hover { border-color:#3b82f6; color:#3b82f6; background:#f8faff; }
+    .add-btn:active { transform:scale(0.98); }
+
+    /* JOURNAL */
+    .journal-section { background:#fff; border-radius:16px; padding:16px; margin-top:16px; border:1px solid #e8e8ed; }
+    .j-title { font-size:14px; font-weight:600; color:#555; margin-bottom:14px; }
+    .j-row { margin-bottom:14px; }
+    .j-row:last-child { margin-bottom:0; }
+    .j-row label { display:block; font-size:12px; color:#999; margin-bottom:6px; font-weight:500; }
+    .j-row input, .j-row textarea { width:100%; background:#f8f8fb; border:1px solid #e8e8ed; color:#333; padding:12px 14px; border-radius:12px; font-size:14px; outline:none; resize:none; -webkit-appearance:none; }
+    .j-row input:focus, .j-row textarea:focus { border-color:#3b82f6; background:#fff; }
+    .mood-btns { display:flex; gap:6px; }
+    .mood-btns button { flex:1; background:#f8f8fb; border:1px solid #e8e8ed; border-radius:12px; padding:10px 0; font-size:20px; cursor:pointer; transition:0.2s; opacity:0.35; }
+    .mood-btns button.active { opacity:1; background:#fff; border-color:#3b82f6; box-shadow:0 2px 8px rgba(59,130,246,0.15); transform:scale(1.05); }
+    .mood-btns button:hover { opacity:0.6; }
+    .mood-btns button:active { transform:scale(0.95); }
+
+    /* WEEK VIEW */
+    .week-overview { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+    .week-card { display:flex; align-items:center; gap:12px; background:#fff; padding:12px 16px; border-radius:14px; border:1px solid #e8e8ed; cursor:pointer; transition:0.15s; }
+    .week-card:hover { border-color:#d0d0d8; }
+    .week-card.today { border-color:#3b82f6; background:#f8faff; }
+    .wday-info { width:50px; }
+    .wday-name { font-size:13px; font-weight:700; color:#555; }
+    .wday-date { font-size:11px; color:#aaa; margin-top:1px; }
+    .wday-bar { flex:1; height:10px; background:#e8e8ed; border-radius:5px; overflow:hidden; }
+    .wday-fill { height:100%; border-radius:5px; transition:width 0.4s ease; }
+    .wday-num { width:45px; text-align:right; font-size:13px; font-weight:600; color:#888; }
+
+    .big-progress { background:#fff; padding:20px; border-radius:16px; text-align:center; border:1px solid #e8e8ed; margin-bottom:16px; }
+    .big-label { font-size:13px; color:#999; margin-bottom:8px; }
+    .big-percent { font-size:36px; font-weight:700; color:#1a1a1a; margin-bottom:10px; }
+    .big-bar { height:12px; background:#e8e8ed; border-radius:6px; overflow:hidden; }
+    .big-fill { height:100%; background:linear-gradient(90deg,#3b82f6,#8b5cf6); border-radius:6px; transition:width 0.5s ease; }
+
+    .day-bars { display:flex; align-items:flex-end; gap:8px; height:120px; padding:10px 0; }
+    .day-bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; }
+    .day-bar-track { width:100%; height:80px; background:#e8e8ed; border-radius:10px; overflow:hidden; position:relative; }
+    .day-bar-fill { position:absolute; bottom:0; left:0; right:0; border-radius:10px 10px 0 0; transition:height 0.4s; }
+    .day-bar-val { font-size:11px; font-weight:600; color:#888; }
+    .day-bar-label { font-size:10px; color:#aaa; }
+
+    /* ANALYTICS */
+    .analytics-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:16px; }
+    .a-card { background:#fff; border-radius:14px; padding:16px; text-align:center; border:1px solid #e8e8ed; }
+    .a-label { font-size:11px; color:#aaa; margin-bottom:6px; }
+    .a-value { font-size:26px; font-weight:700; color:#1a1a1a; }
+    .a-value.green { color:#22c55e; }
+    .a-value.red { color:#ef4444; }
+    .a-value.blue { color:#3b82f6; }
+    .a-big { font-size:32px; font-weight:700; color:#1a1a1a; text-align:center; padding:16px; background:#fff; border-radius:14px; border:1px solid #e8e8ed; margin-bottom:16px; }
+
+    .cat-bar-row { display:flex; align-items:center; gap:10px; margin-bottom:12px; background:#fff; padding:10px 14px; border-radius:12px; border:1px solid #e8e8ed; }
+    .cat-bar-row:last-child { margin-bottom:0; }
+    .cat-bar-label { width:70px; font-size:13px; color:#555; font-weight:500; }
+    .cat-bar-track { flex:1; height:8px; background:#e8e8ed; border-radius:4px; overflow:hidden; }
+    .cat-bar-fill { height:100%; border-radius:4px; transition:width 0.4s; }
+    .cat-bar-pct { width:36px; text-align:right; font-size:13px; font-weight:600; color:#888; }
+
+    /* ARCHIVE */
+    .archive-list { display:flex; flex-direction:column; gap:10px; }
+    .arch-week { background:#fff; border-radius:14px; padding:14px; border:1px solid #e8e8ed; }
+    .arch-week-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+    .arch-week-title { font-size:14px; font-weight:600; color:#333; }
+    .arch-week-pct { font-size:14px; font-weight:700; color:#3b82f6; }
+    .arch-stats { display:flex; gap:14px; font-size:12px; color:#aaa; }
+
+    /* MODAL */
+    .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); align-items:flex-end; justify-content:center; z-index:100; }
+    .modal.show { display:flex; }
+    .modal-box { background:#fff; width:100%; max-width:420px; border-radius:24px 24px 0 0; padding:20px; border:1px solid #e8e8ed; border-bottom:none; animation:slideUp 0.25s ease; max-height:85vh; overflow-y:auto; }
+    @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    .modal-box h3 { font-size:17px; margin-bottom:16px; color:#1a1a1a; }
+    .modal-desc { font-size:13px; color:#888; line-height:1.5; margin-bottom:20px; }
+    .modal-box input[type="text"] { width:100%; background:#f8f8fb; border:1px solid #e8e8ed; color:#333; padding:14px; border-radius:14px; font-size:15px; margin-bottom:16px; outline:none; -webkit-appearance:none; }
+    .modal-box input[type="text"]:focus { border-color:#3b82f6; background:#fff; }
+    .modal-section { margin-bottom:16px; }
+    .modal-section label { display:block; font-size:12px; color:#999; margin-bottom:8px; font-weight:500; }
+    .cat-chooser { display:flex; flex-wrap:wrap; gap:6px; }
+    .cat-chip { background:#f8f8fb; border:1px solid #e8e8ed; color:#888; padding:8px 14px; border-radius:10px; font-size:12px; cursor:pointer; transition:0.2s; font-weight:500; }
+    .cat-chip.active { background:#3b82f6; border-color:#3b82f6; color:#fff; }
+    .type-chooser { display:flex; gap:20px; }
+    .type-chooser label { display:flex; align-items:center; gap:6px; font-size:14px; color:#555; cursor:pointer; margin-bottom:0; }
+    .type-chooser input { width:auto; margin:0; }
+    .day-chooser { display:flex; gap:5px; }
+    .day-chip { flex:1; background:#f8f8fb; border:1px solid #e8e8ed; color:#999; padding:10px 0; border-radius:10px; font-size:11px; font-weight:600; cursor:pointer; transition:0.2s; }
+    .day-chip.active { background:#3b82f6; border-color:#3b82f6; color:#fff; }
+    .modal-actions { display:flex; gap:10px; margin-top:20px; }
+    .modal-actions button { flex:1; padding:14px; border-radius:14px; font-size:15px; font-weight:600; cursor:pointer; border:none; }
+    .btn-secondary { background:#f0f0f5; color:#888; }
+    .btn-primary { background:#3b82f6; color:#fff; }
+    .btn-primary:hover { background:#2563eb; }
+    .btn-primary:active { transform:scale(0.98); }
+
+    /* DATA MODAL */
+    .data-actions { display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+    .data-actions button { width:100%; padding:14px; border-radius:14px; font-size:15px; font-weight:600; cursor:pointer; border:none; transition:0.2s; }
+    .btn-export { background:#22c55e; color:#fff; }
+    .btn-export:hover { background:#16a34a; }
+    .btn-export:active { transform:scale(0.98); }
+    .btn-import { background:#f59e0b; color:#fff; }
+    .btn-import:hover { background:#d97706; }
+    .btn-import:active { transform:scale(0.98); }
+    .data-info { background:#f8f8fb; border-radius:12px; padding:14px; }
+    .di-row { display:flex; justify-content:space-between; font-size:13px; padding:6px 0; border-bottom:1px solid #e8e8ed; }
+    .di-row:last-child { border-bottom:none; }
+    .di-row span:first-child { color:#888; }
+    .di-row span:last-child { font-weight:600; color:#333; }
+
+    .empty-state { text-align:center; padding:30px 0; color:#ccc; font-size:13px; }
+
+    /* Offline badge */
+    .offline-badge { display:none; position:fixed; top:0; left:0; right:0; background:#ef4444; color:#fff; text-align:center; font-size:12px; padding:4px; z-index:300; }
+    .offline-badge.show { display:block; }
+  </style>
+</head>
+<body>
+  <div class="offline-badge" id="offlineBadge">⚠️ Нет подключения к интернету</div>
+
+  <div id="app">
+    <!-- СТАРТОВЫЙ ЭКРАН -->
+    <div id="startScreen" class="start-screen">
+      <div class="start-content">
+        <div class="start-emoji">🦝</div>
+        <h1 class="start-title">Енотов<br>Ежедневник</h1>
+        <p class="start-subtitle">Мечты требуют расписания:<br>без даты — желание не станет задачей</p>
+        <button class="start-btn" onclick="enterApp()">Начать день</button>
+        <div class="start-features">
+          <div class="sf-item"><span>📋</span> Задачи на день</div>
+          <div class="sf-item"><span>📅</span> Недельный план</div>
+          <div class="sf-item"><span>📊</span> Прогресс и аналитика</div>
+          <div class="sf-item"><span>📝</span> Дневник дня</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ОСНОВНОЕ ПРИЛОЖЕНИЕ -->
+    <div id="mainApp" class="main-app hidden">
+      <div class="header">
+        <div class="logo">🦝 Енотов Ежедневник</div>
+        <div class="header-actions">
+          <button class="icon-btn" onclick="openDataModal()" title="Экспорт/Импорт">💾</button>
+          <button class="icon-btn" onclick="showStartScreen()" title="О приложении">ℹ️</button>
+        
+          <button class="icon-btn" onclick="openTelegramModal()" title="Привязать Telegram">🔗</button>
+          <span id="syncBadge" style="font-size:11px;color:#888;align-self:center;margin-left:4px;">⚪ Офлайн</span></div>
+      </div>
+
+      <div class="week-nav">
+        <button onclick="prevWeek()">&#8249;</button>
+        <span id="weekLabel">Неделя 28 — 2026</span>
+        <button onclick="nextWeek()">&#8250;</button>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="day" onclick="switchTab('day')">📋 День</button>
+        <button class="tab-btn" data-tab="week" onclick="switchTab('week')">📅 Неделя</button>
+        <button class="tab-btn" data-tab="goals" onclick="switchTab('goals')">📊 Аналитика</button>
+      </div>
+
+      <!-- ВКЛАДКА ДЕНЬ -->
+      <div id="tab-day" class="tab-content active">
+        <div class="day-selector">
+          <button class="day-pill active" data-day="0" onclick="selectDay(0)">Пн</button>
+          <button class="day-pill" data-day="1" onclick="selectDay(1)">Вт</button>
+          <button class="day-pill" data-day="2" onclick="selectDay(2)">Ср</button>
+          <button class="day-pill" data-day="3" onclick="selectDay(3)">Чт</button>
+          <button class="day-pill" data-day="4" onclick="selectDay(4)">Пт</button>
+          <button class="day-pill" data-day="5" onclick="selectDay(5)">Сб</button>
+          <button class="day-pill" data-day="6" onclick="selectDay(6)">Вс</button>
+        </div>
+
+        <div class="day-date" id="dayDate">Понедельник, 13 июля</div>
+
+        <div class="progress-ring-wrap">
+          <svg class="progress-ring" viewBox="0 0 120 120">
+            <circle class="progress-ring-bg" cx="60" cy="60" r="50"/>
+            <circle id="dayRing" class="progress-ring-fill" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+          </svg>
+          <div class="progress-text">
+            <span id="dayPercent">0%</span>
+            <small>выполнено</small>
+          </div>
+        </div>
+
+        <div class="section-title">📋 Задачи</div>
+        <div id="dayTasks" class="task-list"></div>
+
+        <div class="journal-section">
+          <div class="j-title">📝 Дневник дня</div>
+          <div class="j-row">
+            <label>Сон (часов)</label>
+            <input type="number" id="j-sleep" min="0" max="24" step="0.5" placeholder="—" onchange="saveJournal()">
+          </div>
+          <div class="j-row">
+            <label>Энергия</label>
+            <div class="mood-btns" id="energyBtns">
+              <button data-v="1" onclick="setMood('energy',1)">&#128555;</button>
+              <button data-v="2" onclick="setMood('energy',2)">&#128564;</button>
+              <button data-v="3" onclick="setMood('energy',3)">&#128528;</button>
+              <button data-v="4" onclick="setMood('energy',4)">&#128522;</button>
+              <button data-v="5" onclick="setMood('energy',5)">&#9889;</button>
+            </div>
+          </div>
+          <div class="j-row">
+            <label>Настроение</label>
+            <div class="mood-btns" id="moodBtns">
+              <button data-v="1" onclick="setMood('mood',1)">&#128546;</button>
+              <button data-v="2" onclick="setMood('mood',2)">&#128533;</button>
+              <button data-v="3" onclick="setMood('mood',3)">&#128528;</button>
+              <button data-v="4" onclick="setMood('mood',4)">&#128578;</button>
+              <button data-v="5" onclick="setMood('mood',5)">&#129321;</button>
+            </div>
+          </div>
+          <div class="j-row">
+            <label>Урок дня</label>
+            <input type="text" id="j-lesson" placeholder="Чему научился сегодня..." onchange="saveJournal()">
+          </div>
+          <div class="j-row">
+            <label>Благодарность</label>
+            <input type="text" id="j-gratitude" placeholder="За что благодарен..." onchange="saveJournal()">
+          </div>
+          <div class="j-row">
+            <label>Заметки</label>
+            <textarea id="j-notes" rows="2" placeholder="Мысли, идеи..." onchange="saveJournal()"></textarea>
+          </div>
+        </div>
+
+        <button class="add-btn" onclick="openAddModal('day')">+ Добавить задачу</button>
+      </div>
+
+      <!-- ВКЛАДКА НЕДЕЛЯ -->
+      <div id="tab-week" class="tab-content">
+        <div class="week-overview" id="weekOverview"></div>
+
+        <div class="big-progress">
+          <div class="big-label">Прогресс недели</div>
+          <div class="big-percent" id="weekPercent">0%</div>
+          <div class="big-bar"><div class="big-fill" id="weekBar" style="width:0%"></div></div>
+        </div>
+
+        <div class="section-title">📅 По дням</div>
+        <div class="day-bars" id="weekDayBars"></div>
+      </div>
+
+      <!-- ВКЛАДКА АНАЛИТИКА -->
+      <div id="tab-goals" class="tab-content">
+        <div class="analytics-grid">
+          <div class="a-card">
+            <div class="a-label">Всего задач</div>
+            <div class="a-value" id="a-total">0</div>
+          </div>
+          <div class="a-card">
+            <div class="a-label">Выполнено</div>
+            <div class="a-value green" id="a-done">0</div>
+          </div>
+          <div class="a-card">
+            <div class="a-label">Невыполнено</div>
+            <div class="a-value red" id="a-undone">0</div>
+          </div>
+          <div class="a-card">
+            <div class="a-label">Прогресс</div>
+            <div class="a-value blue" id="a-percent">0%</div>
+          </div>
+        </div>
+
+        <div class="section-title">📊 По категориям</div>
+        <div id="catBars"></div>
+
+        <div class="section-title">😴 Средний сон</div>
+        <div class="a-big" id="a-sleep">— ч</div>
+
+        <div class="section-title">📁 Архив</div>
+        <div class="archive-list" id="archiveList"></div>
+      </div>
+    </div>
+
+    <!-- МОДАЛКА ДОБАВЛЕНИЯ ЗАДАЧИ -->
+    <div id="addModal" class="modal">
+      <div class="modal-box">
+        <h3>Новая задача</h3>
+        <input type="text" id="newTaskText" placeholder="Название задачи..." />
+
+        <div class="modal-section">
+          <label>Категория</label>
+          <div class="cat-chooser">
+            <button class="cat-chip active" data-c="work" onclick="pickCat(this,'work')">💼 Работа</button>
+            <button class="cat-chip" data-c="habit" onclick="pickCat(this,'habit')">🔁 Привычка</button>
+            <button class="cat-chip" data-c="hobby" onclick="pickCat(this,'hobby')">🎨 Хобби</button>
+            <button class="cat-chip" data-c="other" onclick="pickCat(this,'other')">📌 Разное</button>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <label>Тип</label>
+          <div class="type-chooser">
+            <label><input type="radio" name="taskType" value="once" checked> Разовая</label>
+            <label><input type="radio" name="taskType" value="repeat"> Постоянная</label>
+          </div>
+        </div>
+
+        <div class="modal-section" id="dayPickerSection">
+          <label>Дни недели</label>
+          <div class="day-chooser">
+            <button class="day-chip active" data-d="0" onclick="toggleDayChip(this,0)">Пн</button>
+            <button class="day-chip active" data-d="1" onclick="toggleDayChip(this,1)">Вт</button>
+            <button class="day-chip active" data-d="2" onclick="toggleDayChip(this,2)">Ср</button>
+            <button class="day-chip active" data-d="3" onclick="toggleDayChip(this,3)">Чт</button>
+            <button class="day-chip active" data-d="4" onclick="toggleDayChip(this,4)">Пт</button>
+            <button class="day-chip" data-d="5" onclick="toggleDayChip(this,5)">Сб</button>
+            <button class="day-chip" data-d="6" onclick="toggleDayChip(this,6)">Вс</button>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" onclick="closeModal()">Отмена</button>
+          <button class="btn-primary" onclick="saveTask()">Добавить</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- МОДАЛКА ЭКСПОРТ/ИМПОРТ -->
+    <div id="dataModal" class="modal">
+      <div class="modal-box">
+        <h3>💾 Данные</h3>
+        <p class="modal-desc">Все данные хранятся локально в браузере. Сохрани резервную копию, чтобы не потерять прогресс.</p>
+
+        <div class="data-actions">
+          <button class="btn-export" onclick="exportData()">📤 Экспорт в JSON</button>
+          <button class="btn-import" onclick="document.getElementById('importFile').click()">📥 Импорт из JSON</button>
+          <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
+        </div>
+
+        <div class="data-info">
+          <div class="di-row"><span>Задач всего:</span><span id="info-total">0</span></div>
+          <div class="di-row"><span>Записей в дневнике:</span><span id="info-journal">0</span></div>
+
+    <!-- МОДАЛКА ПРИВЯЗКИ TELEGRAM -->
+    <div id="telegramModal" class="modal">
+      <div class="modal-box">
+        <h3>🔗 Привязать Telegram</h3>
+        <p class="modal-desc">Введи свой Chat ID из Telegram, чтобы получать уведомления от бота. Узнать Chat ID: напиши боту /start, затем открой ссылку<br><code>https://api.telegram.org/bot&lt;ТОКЕН&gt;/getUpdates</code></p>
+        <input type="text" id="telegramChatId" placeholder="Введи Chat ID (например: 664054209)" />
+        <div class="modal-actions">
+          <button class="btn-secondary" onclick="closeTelegramModal()">Отмена</button>
+          <button class="btn-primary" onclick="saveTelegramLink()">Привязать</button>
+        </div>
+      </div>
+    </div>
+
+          <div class="di-row"><span>Недель в архиве:</span><span id="info-weeks">0</span></div>
+        </div>
+
+        <button class="btn-secondary" style="width:100%;margin-top:16px;" onclick="closeDataModal()">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+// ==================== CONFIG ====================
+// ВСТАВЬ СВОИ ТОКЕНЫ ЗДЕСЬ:
+const CONFIG = {
+  SUPABASE_URL: 'https://rayhnludfxhzeaacjfco.supabase.co',
+  SUPABASE_ANON_KEY: 'ВСТАВЬ_СЮДА_ТВОЙ_ANON_KEY',
+  API_URL: 'https://raccoon-s-diarybot.onrender.com'
+};
+
+// ==================== SYNC ENGINE ====================
+let userId = localStorage.getItem('enot_user_id') || crypto.randomUUID();
+localStorage.setItem('enot_user_id', userId);
+let syncStatus = 'offline'; // offline / syncing / synced / error
+let lastSync = 0;
+
+async function apiRequest(method, endpoint, body = null) {
+  try {
+    const opts = {
+      method: method,
+      headers: { 'Content-Type': 'application/json' }
+    };
+    if (body) opts.body = JSON.stringify(body);
+    const res = await fetch(CONFIG.API_URL + endpoint, opts);
+    return await res.json();
+  } catch (e) {
+    console.error('API error:', e);
+    return null;
+  }
+}
+
+async function syncToServer() {
+  if (!navigator.onLine) { syncStatus = 'offline'; updateSyncBadge(); return; }
+  syncStatus = 'syncing'; updateSyncBadge();
+
+  // Prepare tasks for sync
+  const tasks = [];
+  Object.entries(data).forEach(([week, weekData]) => {
+    Object.entries(weekData).forEach(([day, dayTasks]) => {
+      dayTasks.forEach(t => {
+        tasks.push({
+          id: String(t.id),
+          user_id: userId,
+          text: t.text,
+          category: t.cat,
+          type: t.type || 'once',
+          days: [parseInt(day)],
+          week: parseInt(week),
+          year: currentYear,
+          done: t.done,
+          created_at: new Date().toISOString()
+        });
+      });
+    });
+  });
+
+  // Prepare journal for sync
+  const journalEntries = [];
+  Object.entries(journal).forEach(([key, j]) => {
+    const [week, day] = key.split('-').map(Number);
+    journalEntries.push({
+      id: userId + '-' + key,
+      user_id: userId,
+      week: week,
+      day: day,
+      year: currentYear,
+      sleep: parseFloat(j.sleep) || 0,
+      energy: j.energy || 0,
+      mood: j.mood || 0,
+      lesson: j.lesson || '',
+      gratitude: j.gratitude || '',
+      notes: j.notes || '',
+      created_at: new Date().toISOString()
+    });
+  });
+
+  const result = await apiRequest('POST', '/api/sync', {
+    user_id: userId,
+    tasks: tasks,
+    journal: journalEntries.length > 0 ? journalEntries[0] : null
+  });
+
+  if (result && result.success) {
+    syncStatus = 'synced';
+    lastSync = Date.now();
+  } else {
+    syncStatus = 'error';
+  }
+  updateSyncBadge();
+}
+
+async function linkTelegram(chatId) {
+  const result = await apiRequest('POST', '/api/link-telegram', {
+    user_id: userId,
+    chat_id: chatId
+  });
+  return result && result.success;
+}
+
+function updateSyncBadge() {
+  const badge = document.getElementById('syncBadge');
+  if (!badge) return;
+  const icons = { offline: '⚪', syncing: '🔄', synced: '✅', error: '❌' };
+  const texts = { offline: 'Офлайн', syncing: 'Синхронизация...', synced: 'Синхронизировано', error: 'Ошибка' };
+  badge.textContent = icons[syncStatus] + ' ' + texts[syncStatus];
+  badge.style.color = syncStatus === 'synced' ? '#22c55e' : syncStatus === 'error' ? '#ef4444' : '#888';
+}
+
+// Auto-sync every 30 seconds when online
+setInterval(() => {
+  if (navigator.onLine && Date.now() - lastSync > 30000) {
+    syncToServer();
+  }
+}, 30000);
+
+// Sync on data changes
+const originalSaveData = saveData;
+saveData = function() {
+  originalSaveData();
+  if (navigator.onLine) {
+    clearTimeout(window._syncTimeout);
+    window._syncTimeout = setTimeout(syncToServer, 2000);
+  }
+};
+
+const originalSaveJournalData = saveJournalData;
+saveJournalData = function() {
+  originalSaveJournalData();
+  if (navigator.onLine) {
+    clearTimeout(window._syncTimeout);
+    window._syncTimeout = setTimeout(syncToServer, 2000);
+  }
+};
+
+
+
+    // ── SERVICE WORKER REGISTRATION ──
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('SW registered'))
+          .catch(err => console.log('SW error:', err));
+      });
+    }
+
+    // ── OFFLINE DETECTION ──
+    function updateOnlineStatus() {
+      document.getElementById('offlineBadge').classList.toggle('show', !navigator.onLine);
+    }
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
+
+    // ── STATE ──
+    let currentWeek = getWeekNumber(new Date());
+    let currentYear = new Date().getFullYear();
+    let selectedDay = (new Date().getDay()+6)%7;
+    let activeTab = 'day';
+    let modalCat = 'work';
+    let modalDays = [0,1,2,3,4];
+    let modalFromTab = 'day';
+    let hasEntered = false;
+
+    const catColors = {work:'#3b82f6', habit:'#22c55e', hobby:'#a855f7', other:'#f59e0b'};
+    const catGradients = {work:'linear-gradient(90deg,#3b82f6,#60a5fa)', habit:'linear-gradient(90deg,#22c55e,#4ade80)', hobby:'linear-gradient(90deg,#a855f7,#c084fc)', other:'linear-gradient(90deg,#f59e0b,#fbbf24)'};
+    const dayNames = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+    const fullDayNames = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'];
+    const months = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+
+    let data = loadData() || {};
+    let journal = loadJournal() || {};
+
+    function getWeekNumber(d) {
+      d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+      return Math.ceil((((d - yearStart) / 86400000) + 1)/7);
+    }
+    function getWeekStart(week,year) {
+      const d = new Date(year,0,1);
+      const dayOffset = (d.getDay()+6)%7;
+      d.setDate(d.getDate() - dayOffset + (week-1)*7);
+      return d;
+    }
+    function getDateOfDay(week,year,dayIndex) {
+      const start = getWeekStart(week,year);
+      const d = new Date(start);
+      d.setDate(d.getDate() + dayIndex);
+      return d;
+    }
+    function formatDate(d) { return d.getDate() + ' ' + months[d.getMonth()]; }
+
+    function loadData() { try{return JSON.parse(localStorage.getItem('trackerData'))}catch(e){return null} }
+    function saveData() { localStorage.setItem('trackerData', JSON.stringify(data)); }
+    function loadJournal() { try{return JSON.parse(localStorage.getItem('trackerJournal'))}catch(e){return null} }
+    function saveJournalData() { localStorage.setItem('trackerJournal', JSON.stringify(journal)); }
+
+    // ── START SCREEN ──
+    function enterApp() {
+      hasEntered = true;
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('mainApp').classList.remove('hidden');
+      render();
+    }
+    function showStartScreen() {
+      document.getElementById('startScreen').style.display = 'flex';
+      document.getElementById('mainApp').classList.add('hidden');
+    }
+
+    // ── RENDER ──
+    function render() {
+      document.getElementById('weekLabel').textContent = 'Неделя ' + currentWeek + ' — ' + currentYear;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab===activeTab));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id==='tab-'+activeTab));
+
+      if(activeTab==='day') renderDay();
+      if(activeTab==='week') renderWeek();
+      if(activeTab==='goals') renderAnalytics();
+      saveData();
+    }
+
+    function renderDay() {
+      const date = getDateOfDay(currentWeek, currentYear, selectedDay);
+      document.getElementById('dayDate').textContent = fullDayNames[selectedDay] + ', ' + formatDate(date);
+
+      const tasks = (data[currentWeek] && data[currentWeek][selectedDay]) || [];
+      const container = document.getElementById('dayTasks');
+      container.innerHTML = '';
+
+      if(tasks.length === 0) {
+        container.innerHTML = '<div class="empty-state">Нет задач на этот день</div>';
+      } else {
+        tasks.forEach(t => {
+          const el = document.createElement('div');
+          el.className = 'task-item';
+          el.innerHTML = '<div class="task-check ' + (t.done?'done':'') + '" onclick="toggleTask(' + t.id + ')"></div>' +
+            '<div class="task-text ' + (t.done?'done':'') + '">' + esc(t.text) + '</div>' +
+            '<span class="task-cat" style="color:' + catColors[t.cat] + ';background:' + catColors[t.cat] + '11">' + catLabel(t.cat) + '</span>' +
+            '<button class="task-del" onclick="deleteTask(' + t.id + ')">&#215;</button>';
+          container.appendChild(el);
+        });
+      }
+
+      const done = tasks.filter(t=>t.done).length;
+      const pct = tasks.length ? Math.round(done/tasks.length*100) : 0;
+      document.getElementById('dayPercent').textContent = pct + '%';
+      const ring = document.getElementById('dayRing');
+      ring.style.strokeDashoffset = 314 - (314 * pct / 100);
+      ring.style.stroke = pct === 100 ? '#22c55e' : '#3b82f6';
+
+      document.querySelectorAll('.day-pill').forEach((b,i) => {
+        b.classList.toggle('active', i === selectedDay);
+      });
+
+      const key = currentWeek + '-' + selectedDay;
+      const j = journal[key] || {};
+      document.getElementById('j-sleep').value = j.sleep || '';
+      document.getElementById('j-lesson').value = j.lesson || '';
+      document.getElementById('j-gratitude').value = j.gratitude || '';
+      document.getElementById('j-notes').value = j.notes || '';
+      document.querySelectorAll('#energyBtns button').forEach(b => b.classList.toggle('active', parseInt(b.dataset.v)===(j.energy||0)));
+      document.querySelectorAll('#moodBtns button').forEach(b => b.classList.toggle('active', parseInt(b.dataset.v)===(j.mood||0)));
+    }
+
+    function renderWeek() {
+      const today = new Date();
+      const todayWeek = getWeekNumber(today);
+      const todayDay = (today.getDay()+6)%7;
+      const container = document.getElementById('weekOverview');
+      container.innerHTML = '';
+
+      let totalDone = 0, totalAll = 0;
+
+      for(let day=0; day<7; day++) {
+        const tasks = (data[currentWeek] && data[currentWeek][day]) || [];
+        const done = tasks.filter(t=>t.done).length;
+        const all = tasks.length;
+        totalDone += done; totalAll += all;
+        const pct = all ? Math.round(done/all*100) : 0;
+        const isToday = currentWeek===todayWeek && day===todayDay;
+        const date = getDateOfDay(currentWeek, currentYear, day);
+
+        const card = document.createElement('div');
+        card.className = 'week-card' + (isToday?' today':'');
+        card.onclick = function() { selectDay(day); switchTab('day'); };
+        card.innerHTML = '<div class="wday-info"><div class="wday-name">' + dayNames[day] + '</div><div class="wday-date">' + formatDate(date) + '</div></div>' +
+          '<div class="wday-bar"><div class="wday-fill" style="width:' + pct + '%;background:' + (pct===100?'#22c55e':catGradients.work) + '"></div></div>' +
+          '<div class="wday-num">' + done + '/' + all + '</div>';
+        container.appendChild(card);
+      }
+
+      const wpct = totalAll ? Math.round(totalDone/totalAll*100) : 0;
+      document.getElementById('weekPercent').textContent = wpct + '%';
+      document.getElementById('weekBar').style.width = wpct + '%';
+
+      const barsContainer = document.getElementById('weekDayBars');
+      barsContainer.innerHTML = '';
+      for(let day=0; day<7; day++) {
+        const tasks = (data[currentWeek] && data[currentWeek][day]) || [];
+        const done = tasks.filter(t=>t.done).length;
+        const all = tasks.length;
+        const pct = all ? Math.round(done/all*100) : 0;
+        const col = document.createElement('div');
+        col.className = 'day-bar-col';
+        col.innerHTML = '<div class="day-bar-track"><div class="day-bar-fill" style="height:' + pct + '%;background:' + (pct===100?'#22c55e':'linear-gradient(180deg,#3b82f6,#8b5cf6)') + '"></div></div>' +
+          '<div class="day-bar-val">' + done + '/' + all + '</div>' +
+          '<div class="day-bar-label">' + dayNames[day] + '</div>';
+        barsContainer.appendChild(col);
+      }
+    }
+
+    function renderAnalytics() {
+      let total=0, done=0;
+      const catStats = {work:[0,0], habit:[0,0], hobby:[0,0], other:[0,0]};
+      const weekData = data[currentWeek] || {};
+      let sleepSum = 0, sleepCount = 0;
+
+      for(let day=0; day<7; day++) {
+        const tasks = weekData[day] || [];
+        const d = tasks.filter(t=>t.done).length;
+        const a = tasks.length;
+        total += a; done += d;
+        tasks.forEach(t => { catStats[t.cat][0]++; if(t.done) catStats[t.cat][1]++; });
+
+        const j = journal[currentWeek + '-' + day];
+        if(j && j.sleep) { sleepSum += parseFloat(j.sleep); sleepCount++; }
+      }
+
+      document.getElementById('a-total').textContent = total;
+      document.getElementById('a-done').textContent = done;
+      document.getElementById('a-undone').textContent = total-done;
+      document.getElementById('a-percent').textContent = (total?Math.round(done/total*100):0)+'%';
+      document.getElementById('a-sleep').textContent = sleepCount ? (sleepSum/sleepCount).toFixed(1)+' ч' : '— ч';
+
+      const catContainer = document.getElementById('catBars');
+      catContainer.innerHTML = '';
+      Object.entries(catStats).forEach(function([cat,[all,d]]) {
+        const pct = all ? Math.round(d/all*100) : 0;
+        const row = document.createElement('div');
+        row.className = 'cat-bar-row';
+        row.innerHTML = '<div class="cat-bar-label">' + catLabel(cat) + '</div>' +
+          '<div class="cat-bar-track"><div class="cat-bar-fill" style="width:' + pct + '%;background:' + catGradients[cat] + '"></div></div>' +
+          '<div class="cat-bar-pct">' + pct + '%</div>';
+        catContainer.appendChild(row);
+      });
+
+      const archList = document.getElementById('archiveList');
+      archList.innerHTML = '';
+      const weeks = Object.keys(data).map(Number).sort(function(a,b){return b-a}).filter(function(w){return w<currentWeek});
+      if(weeks.length===0) {
+        archList.innerHTML = '<div class="empty-state">Пока нет архивных недель</div>';
+      } else {
+        weeks.slice(0,5).forEach(function(w) {
+          let wtotal=0, wdone=0;
+          for(let day=0; day<7; day++) {
+            const tasks = (data[w] && data[w][day]) || [];
+            wtotal += tasks.length;
+            wdone += tasks.filter(function(t){return t.done}).length;
+          }
+          const pct = wtotal ? Math.round(wdone/wtotal*100) : 0;
+          const el = document.createElement('div');
+          el.className = 'arch-week';
+          el.innerHTML = '<div class="arch-week-header"><span class="arch-week-title">Неделя ' + w + ', ' + currentYear + '</span><span class="arch-week-pct">' + pct + '%</span></div>' +
+            '<div class="arch-stats"><span>&#10003; ' + wdone + ' выполнено</span><span>&#9675; ' + (wtotal-wdone) + ' пропущено</span><span>Всего ' + wtotal + '</span></div>';
+          archList.appendChild(el);
+        });
+      }
+    }
+
+    // ── ACTIONS ──
+    function switchTab(t) {
+      activeTab = t;
+      render();
+    }
+    function selectDay(d) {
+      selectedDay = d;
+      if(activeTab!=='day') switchTab('day');
+      else render();
+    }
+    function prevWeek() { currentWeek--; render(); }
+    function nextWeek() { currentWeek++; render(); }
+
+    function toggleTask(id) {
+      const weekData = data[currentWeek] || {};
+      for(let day=0; day<7; day++) {
+        const t = (weekData[day]||[]).find(function(x){return x.id===id});
+        if(t) { t.done = !t.done; break; }
+      }
+      render();
+    }
+    function deleteTask(id) {
+      const weekData = data[currentWeek] || {};
+      for(let day=0; day<7; day++) {
+        const arr = weekData[day] || [];
+        const idx = arr.findIndex(function(x){return x.id===id});
+        if(idx!==-1) { arr.splice(idx,1); break; }
+      }
+      render();
+    }
+
+    function saveJournal() {
+      const key = currentWeek + '-' + selectedDay;
+      if(!journal[key]) journal[key] = {};
+      journal[key].sleep = document.getElementById('j-sleep').value;
+      journal[key].lesson = document.getElementById('j-lesson').value;
+      journal[key].gratitude = document.getElementById('j-gratitude').value;
+      journal[key].notes = document.getElementById('j-notes').value;
+      saveJournalData();
+    }
+    function setMood(type, val) {
+      const key = currentWeek + '-' + selectedDay;
+      if(!journal[key]) journal[key] = {};
+      journal[key][type] = val;
+      saveJournalData();
+      renderDay();
+    }
+
+    // ── MODALS ──
+    function openAddModal(from) {
+      modalFromTab = from;
+      document.getElementById('addModal').classList.add('show');
+      document.getElementById('newTaskText').value = '';
+      document.getElementById('newTaskText').focus();
+      modalCat = 'work';
+      modalDays = from==='day' ? [selectedDay] : [0,1,2,3,4];
+      updateModalUI();
+    }
+    function closeModal() { document.getElementById('addModal').classList.remove('show'); }
+
+    function pickCat(btn, cat) {
+      modalCat = cat;
+      document.querySelectorAll('.cat-chip').forEach(function(b){b.classList.remove('active')});
+      btn.classList.add('active');
+    }
+    function toggleDayChip(btn, day) {
+      btn.classList.toggle('active');
+      modalDays = Array.from(document.querySelectorAll('.day-chip.active')).map(function(b){return parseInt(b.dataset.d)});
+    }
+    function updateModalUI() {
+      document.querySelectorAll('.cat-chip').forEach(function(b){b.classList.toggle('active', b.dataset.c===modalCat)});
+      document.querySelectorAll('.day-chip').forEach(function(b){b.classList.toggle('active', modalDays.includes(parseInt(b.dataset.d)))});
+    }
+    function saveTask() {
+      const text = document.getElementById('newTaskText').value.trim();
+      if(!text) return;
+      const type = document.querySelector('input[name="taskType"]:checked').value;
+
+      if(!data[currentWeek]) data[currentWeek] = {};
+      modalDays.forEach(function(day) {
+        if(!data[currentWeek][day]) data[currentWeek][day] = [];
+        data[currentWeek][day].push({
+          id: Date.now() + day + Math.random()*1000,
+          text: text, cat: modalCat, done: false, type: type
+        });
+      });
+      closeModal();
+      render();
+    }
+
+    // ── DATA MODAL ──
+    function openDataModal() {
+      document.getElementById('dataModal').classList.add('show');
+      let totalTasks = 0;
+      Object.values(data).forEach(function(w) { Object.values(w).forEach(function(d) { totalTasks += d.length; }); });
+      document.getElementById('info-total').textContent = totalTasks;
+      document.getElementById('info-journal').textContent = Object.keys(journal).length;
+      document.getElementById('info-weeks').textContent = Object.keys(data).filter(function(w) { return parseInt(w) < currentWeek; }).length;
+    }
+    function closeDataModal() { document.getElementById('dataModal').classList.remove('show'); }
+
+    function exportData() {
+      const payload = {
+        version: '1.0',
+        exportedAt: new Date().toISOString(),
+        data: data,
+        journal: journal
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'enotov-ezhednevnik-' + currentWeek + '-' + currentYear + '.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      closeDataModal();
+    }
+
+    function importData(input) {
+      const file = input.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const payload = JSON.parse(e.target.result);
+          if(payload.data) data = payload.data;
+          if(payload.journal) journal = payload.journal;
+          saveData();
+          saveJournalData();
+          alert('&#9989; Данные успешно импортированы!');
+          render();
+        } catch(err) {
+          alert('&#10060; Ошибка импорта: неверный формат файла');
+        }
+      };
+      reader.readAsText(file);
+      input.value = '';
+      closeDataModal();
+    }
+
+    document.getElementById('newTaskText').addEventListener('keydown', function(e){
+      if(e.key==='Enter') saveTask();
+    });
+
+    function catLabel(c) {
+      const m = {work:'Работа', habit:'Привычка', hobby:'Хобби', other:'Разное'};
+      return m[c] || c;
+    }
+    function esc(s) {
+      const d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    // ── INIT ──
+    if(localStorage.getItem('trackerData')) {
+      enterApp();
+    }
+  
+
+    // ── TELEGRAM LINK MODAL ──
+    function openTelegramModal() {
+      document.getElementById('telegramModal').classList.add('show');
+      document.getElementById('telegramChatId').focus();
+    }
+    function closeTelegramModal() {
+      document.getElementById('telegramModal').classList.remove('show');
+    }
+    async function saveTelegramLink() {
+      const chatId = document.getElementById('telegramChatId').value.trim();
+      if (!chatId || isNaN(chatId)) {
+        alert('Введи корректный Chat ID (только цифры)');
+        return;
+      }
+      const btn = document.querySelector('#telegramModal .btn-primary');
+      btn.textContent = 'Привязка...';
+      const success = await linkTelegram(chatId);
+      btn.textContent = 'Привязать';
+      if (success) {
+        alert('✅ Telegram привязан! Бот пришлёт тестовое сообщение.');
+        closeTelegramModal();
+        localStorage.setItem('enot_chat_id', chatId);
+      } else {
+        alert('❌ Ошибка привязки. Проверь Chat ID и попробуй снова.');
+      }
+    }
+    document.getElementById('telegramChatId').addEventListener('keydown', function(e){
+      if(e.key==='Enter') saveTelegramLink();
+    });
+
+    // ── SYNC ON APP OPEN ──
+    window.addEventListener('online', function() {
+      syncStatus = 'syncing';
+      updateSyncBadge();
+      syncToServer();
+    });
+    window.addEventListener('load', function() {
+      if (navigator.onLine) syncToServer();
+      // Restore chat id if saved
+      const savedChatId = localStorage.getItem('enot_chat_id');
+      if (savedChatId) document.getElementById('telegramChatId').value = savedChatId;
+    });
+
+</script>
+</body>
+</html>
