@@ -427,6 +427,69 @@
       margin-top: 8px;
     }
     
+    /* ===== WHEEL PICKER (новое) ===== */
+    .wheel-picker {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 0;
+      position: relative;
+    }
+    .wheel-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      max-height: 200px;
+      overflow-y: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: y mandatory;
+      padding: 80px 0;
+    }
+    .wheel-column::-webkit-scrollbar { display: none; }
+    .wheel-item {
+      width: 60px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--hint);
+      border-radius: 10px;
+      scroll-snap-align: center;
+      transition: all 0.2s;
+    }
+    .wheel-item.selected {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--link);
+      background: rgba(36,129,204,0.08);
+    }
+    .wheel-label {
+      font-size: 13px;
+      color: var(--hint);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .wheel-center-line {
+      position: absolute;
+      top: 50%;
+      left: 20%;
+      right: 20%;
+      height: 44px;
+      border-top: 2px solid var(--link);
+      border-bottom: 2px solid var(--link);
+      border-radius: 10px;
+      pointer-events: none;
+      transform: translateY(-50%);
+      opacity: 0.3;
+    }
+    
+    /* ===== JOURNAL (исправлено) ===== */
     .journal-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -441,6 +504,7 @@
       cursor: pointer;
       transition: all 0.3s;
       border: 2px solid transparent;
+      position: relative;
     }
     .journal-card:active { transform: scale(0.96); }
     .journal-card:hover { border-color: rgba(36,129,204,0.2); }
@@ -452,6 +516,13 @@
       -webkit-text-fill-color: transparent;
     }
     .journal-card .label { font-size: 12px; color: var(--hint); margin-top: 6px; font-weight: 600; }
+    .journal-card .range-hint {
+      font-size: 10px;
+      color: var(--hint);
+      opacity: 0.6;
+      margin-top: 4px;
+    }
+    
     .journal-input {
       background: var(--secondary-bg);
       border-radius: 20px;
@@ -470,24 +541,114 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    .journal-input input[type="number"] {
-      width: 100%;
-      border: none;
-      background: transparent;
-      color: var(--text);
-      font-size: 28px;
-      font-weight: 800;
-      text-align: center;
-    }
     .journal-input textarea {
       width: 100%;
       border: none;
       background: transparent;
       color: var(--text);
-      font-size: 15px;
+      font-size: 16px;
       font-family: inherit;
       resize: none;
-      min-height: 60px;
+      min-height: 100px;
+      line-height: 1.6;
+    }
+    
+    /* ===== ANALYTICS (новый дизайн) ===== */
+    .analytics-header {
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--secondary-bg), rgba(36,129,204,0.05));
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .analytics-header .big-number {
+      font-size: 48px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--link), #6B5CE7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .analytics-header .label {
+      font-size: 14px;
+      color: var(--hint);
+      margin-top: 4px;
+    }
+    
+    .stat-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px;
+      background: var(--secondary-bg);
+      border-radius: 16px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+    .stat-row:active { background: rgba(0,0,0,0.08); }
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .stat-icon.blue { background: rgba(74,144,217,0.12); }
+    .stat-icon.green { background: rgba(92,184,92,0.12); }
+    .stat-icon.orange { background: rgba(240,173,78,0.12); }
+    .stat-icon.purple { background: rgba(155,89,182,0.12); }
+    
+    .stat-info { flex: 1; }
+    .stat-info .title { font-size: 15px; font-weight: 600; }
+    .stat-info .subtitle { font-size: 13px; color: var(--hint); margin-top: 2px; }
+    
+    .stat-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    
+    .progress-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: rgba(0,0,0,0.06);
+      border-radius: 4px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+    .progress-bar-fill.blue { background: linear-gradient(90deg, var(--link), #6B5CE7); }
+    .progress-bar-fill.green { background: linear-gradient(90deg, #5CB85C, #7ED957); }
+    .progress-bar-fill.orange { background: linear-gradient(90deg, #F0AD4E, #FFD700); }
+    
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .category-card {
+      padding: 16px;
+      border-radius: 16px;
+      text-align: center;
+      background: var(--secondary-bg);
+    }
+    .category-card .count {
+      font-size: 28px;
+      font-weight: 800;
+    }
+    .category-card .name {
+      font-size: 13px;
+      color: var(--hint);
+      margin-top: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
     }
     
     .setting-row {
@@ -610,6 +771,7 @@
     let journalData = {};
     let userSettings = {};
     let selectedDaysForNewTask = [selectedDay];
+    let pendingJournal = {};
 
     const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
     const fullDayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
@@ -770,13 +932,11 @@
       }));
     }
 
-    // ===== SAVE TO SERVER — ИСПРАВЛЕНО =====
     async function saveTask(task) {
       if (!telegramId) return;
 
       console.log('[saveTask] Saving for days:', task.days);
 
-      // Сохраняем задачу для КАЖДОГО выбранного дня
       for (const day of task.days) {
         const taskForDay = {
           id: task.id + '_' + day,
@@ -982,45 +1142,115 @@
       }
     }
 
+    // ===== JOURNAL (исправлено: автосохранение + скролл) =====
     function renderJournal(container) {
       const today = new Date().toISOString().split('T')[0];
       const entry = journalData[today] || {};
+      pendingJournal = { ...entry };
 
       container.innerHTML = `
         <div class="section-title">Сегодня, ${formatDate(new Date())}</div>
         
         <div class="journal-grid">
-          <div class="journal-card" onclick="editJournalValue('sleep', 'Сон (часы)', 0, 12)">
+          <div class="journal-card" onclick="openWheelPicker('sleep', 'Сон (часы)', 0, 12)">
             <div class="value">${entry.sleep ?? '-'}</div>
             <div class="label">😴 Сон</div>
+            <div class="range-hint">0–12 ч</div>
           </div>
-          <div class="journal-card" onclick="editJournalValue('energy', 'Энергия', 1, 10)">
+          <div class="journal-card" onclick="openWheelPicker('energy', 'Энергия', 1, 10)">
             <div class="value">${entry.energy ?? '-'}</div>
             <div class="label">⚡ Энергия</div>
+            <div class="range-hint">1–10</div>
           </div>
-          <div class="journal-card" onclick="editJournalValue('mood', 'Настроение', 1, 10)">
+          <div class="journal-card" onclick="openWheelPicker('mood', 'Настроение', 1, 10)">
             <div class="value">${entry.mood ?? '-'}</div>
             <div class="label">😊 Настроение</div>
+            <div class="range-hint">1–10</div>
           </div>
         </div>
 
         <div class="journal-input">
           <label>💡 Урок дня</label>
-          <textarea id="jLesson" placeholder="Чему научился сегодня?">${entry.lesson || ''}</textarea>
+          <textarea id="jLesson" placeholder="Чему научился сегодня?" oninput="autoSaveJournalField('lesson', this.value)">${entry.lesson || ''}</textarea>
         </div>
         <div class="journal-input">
           <label>🙏 За что благодарен</label>
-          <textarea id="jGratitude" placeholder="За что thankful?">${entry.gratitude || ''}</textarea>
+          <textarea id="jGratitude" placeholder="За что thankful?" oninput="autoSaveJournalField('gratitude', this.value)">${entry.gratitude || ''}</textarea>
         </div>
         <div class="journal-input">
           <label>📝 Заметки</label>
-          <textarea id="jNotes" placeholder="Мысли, идеи...">${entry.notes || ''}</textarea>
+          <textarea id="jNotes" placeholder="Мысли, идеи..." oninput="autoSaveJournalField('notes', this.value)">${entry.notes || ''}</textarea>
         </div>
 
-        <button class="btn-primary" onclick="saveJournalEntry()">💾 Сохранить дневник</button>
+        <button class="btn-primary" onclick="saveJournalFromPending()">💾 Сохранить дневник</button>
       `;
     }
 
+    function autoSaveJournalField(field, value) {
+      pendingJournal[field] = value;
+    }
+
+    async function saveJournalFromPending() {
+      const today = new Date().toISOString().split('T')[0];
+      const entry = {
+        sleep: pendingJournal.sleep ?? journalData[today]?.sleep ?? null,
+        energy: pendingJournal.energy ?? journalData[today]?.energy ?? null,
+        mood: pendingJournal.mood ?? journalData[today]?.mood ?? null,
+        lesson: pendingJournal.lesson || '',
+        gratitude: pendingJournal.gratitude || '',
+        notes: pendingJournal.notes || ''
+      };
+      await saveJournal(entry);
+    }
+
+    // ===== WHEEL PICKER (новое) =====
+    let wheelValue = 5;
+
+    function openWheelPicker(field, label, min, max) {
+      const today = new Date().toISOString().split('T')[0];
+      wheelValue = pendingJournal[field] ?? journalData[today]?.[field] ?? Math.floor((min + max) / 2);
+      
+      let items = '';
+      for (let i = min; i <= max; i++) {
+        items += `<div class="wheel-item ${i === wheelValue ? 'selected' : ''}" data-val="${i}" onclick="selectWheelValue(${i})">${i}</div>`;
+      }
+
+      openModal(`
+        <div class="modal-title">${label}</div>
+        <div style="text-align:center;margin-bottom:12px;">
+          <span style="font-size:14px;color:var(--hint);">Прокрути и выбери</span>
+        </div>
+        <div class="wheel-picker">
+          <div class="wheel-center-line"></div>
+          <div class="wheel-column" id="wheelColumn">
+            ${items}
+          </div>
+        </div>
+        <button class="btn-primary" onclick="confirmWheelValue('${field}')">Сохранить</button>
+      `);
+
+      // Прокрутка к выбранному
+      setTimeout(() => {
+        const selected = document.querySelector('.wheel-item.selected');
+        if (selected) selected.scrollIntoView({ behavior: 'instant', block: 'center' });
+      }, 50);
+    }
+
+    function selectWheelValue(val) {
+      wheelValue = val;
+      document.querySelectorAll('.wheel-item').forEach(el => {
+        el.classList.toggle('selected', parseInt(el.dataset.val) === val);
+      });
+    }
+
+    function confirmWheelValue(field) {
+      pendingJournal[field] = wheelValue;
+      document.getElementById('modal').classList.remove('active');
+      renderContent();
+      showToast(`${field === 'sleep' ? 'Сон' : field === 'energy' ? 'Энергия' : 'Настроение'}: ${wheelValue}`);
+    }
+
+    // ===== ANALYTICS (новый дизайн) =====
     function renderStats(container) {
       let totalTasks = 0, doneTasks = 0, totalSleep = 0, sleepCount = 0;
       const categoryStats = {};
@@ -1043,28 +1273,59 @@
       const completionRate = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
 
       container.innerHTML = `
-        <div class="section-title">Общая статистика</div>
-        
-        <div class="stat-card">
-          <div class="label">📋 Всего задач</div>
-          <div class="value">${totalTasks}</div>
-        </div>
-        <div class="stat-card">
-          <div class="label">✅ Выполнено</div>
-          <div class="value">${doneTasks} (${completionRate}%)</div>
-        </div>
-        <div class="stat-card">
-          <div class="label">😴 Средний сон</div>
-          <div class="value">${avgSleep} ч</div>
+        <div class="analytics-header">
+          <div class="big-number">${completionRate}%</div>
+          <div class="label">Выполнено задач</div>
         </div>
 
-        <div class="section-title">По категориям</div>
-        ${Object.entries(categoryStats).map(([cat, count]) => `
-          <div class="stat-card">
-            <div class="label">${cat}</div>
-            <div class="value">${count}</div>
+        <div class="section-title">📊 Статистика</div>
+        
+        <div class="stat-row">
+          <div class="stat-icon blue">📋</div>
+          <div class="stat-info">
+            <div class="title">Всего задач</div>
+            <div class="subtitle">${doneTasks} из ${totalTasks} выполнено</div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill blue" style="width:${completionRate}%"></div>
+            </div>
           </div>
-        `).join('') || '<div class="empty"><p>Нет данных</p></div>'}
+          <div class="stat-value">${totalTasks}</div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-icon green">😴</div>
+          <div class="stat-info">
+            <div class="title">Средний сон</div>
+            <div class="subtitle">${sleepCount} записей в дневнике</div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill green" style="width:${avgSleep !== '-' ? Math.min(avgSleep / 12 * 100, 100) : 0}%"></div>
+            </div>
+          </div>
+          <div class="stat-value">${avgSleep}ч</div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-icon orange">⚡</div>
+          <div class="stat-info">
+            <div class="title">Записей в дневнике</div>
+            <div class="subtitle">Всего за все время</div>
+          </div>
+          <div class="stat-value">${Object.keys(journalData).length}</div>
+        </div>
+
+        <div class="section-title">📁 По категориям</div>
+        <div class="category-grid">
+          ${Object.entries(categoryStats).map(([cat, count]) => {
+            const colors = { work: 'var(--cat-work)', health: 'var(--cat-health)', study: 'var(--cat-study)', hobby: 'var(--cat-hobby)', other: 'var(--cat-other)' };
+            const names = { work: 'Работа', health: 'Здоровье', study: 'Учёба', hobby: 'Хобби', other: 'Другое' };
+            return `
+              <div class="category-card">
+                <div class="count" style="color:${colors[cat] || colors.other}">${count}</div>
+                <div class="name">${names[cat] || cat}</div>
+              </div>
+            `;
+          }).join('') || '<div class="empty" style="grid-column:1/-1"><p>Нет данных</p></div>'}
+        </div>
       `;
     }
 
@@ -1107,6 +1368,10 @@
 
     function closeModal(e) {
       if (e.target === e.currentTarget) {
+        // Автосохранение дневника при закрытии модалки
+        if (currentScreen === 'journal' && Object.keys(pendingJournal).length > 0) {
+          saveJournalFromPending();
+        }
         document.getElementById('modal').classList.remove('active');
       }
     }
@@ -1185,7 +1450,6 @@
       }
     }
 
-    // ===== ИСПРАВЛЕННЫЙ addTask =====
     async function addTask() {
       const text = document.getElementById('taskText').value.trim();
       const category = document.getElementById('taskCategory').value;
@@ -1207,7 +1471,6 @@
 
       console.log('[addTask] Creating for days:', selectedDaysForNewTask);
 
-      // Добавляем в localStorage для КАЖДОГО выбранного дня
       if (!tasks[currentWeek]) tasks[currentWeek] = {};
       
       for (const day of selectedDaysForNewTask) {
@@ -1256,7 +1519,6 @@
     }
 
     async function removeTask(taskId) {
-      // Удаляем из localStorage
       const dayTasks = tasks[currentWeek]?.[selectedDay] || [];
       tasks[currentWeek][selectedDay] = dayTasks.filter(t => t.id !== taskId);
 
@@ -1304,45 +1566,6 @@
       });
       
       document.getElementById('modal').classList.remove('active');
-    }
-
-    function editJournalValue(field, label, min, max) {
-      const today = new Date().toISOString().split('T')[0];
-      const entry = journalData[today] || {};
-      
-      openModal(`
-        <div class="modal-title">${label}</div>
-        <div class="input-group">
-          <input type="number" id="jVal" value="${entry[field] || ''}" min="${min}" max="${max}" 
-            style="font-size:56px;text-align:center;padding:30px;">
-        </div>
-        <button class="btn-primary" onclick="setJournalValue('${field}')">Сохранить</button>
-      `);
-    }
-
-    function setJournalValue(field) {
-      const val = parseInt(document.getElementById('jVal').value);
-      const today = new Date().toISOString().split('T')[0];
-      if (!journalData[today]) journalData[today] = {};
-      journalData[today][field] = val;
-      document.getElementById('modal').classList.remove('active');
-      renderContent();
-    }
-
-    async function saveJournalEntry() {
-      const today = new Date().toISOString().split('T')[0];
-      const currentEntry = journalData[today] || {};
-      
-      const entry = {
-        sleep: currentEntry.sleep || null,
-        energy: currentEntry.energy || null,
-        mood: currentEntry.mood || null,
-        lesson: document.getElementById('jLesson')?.value || '',
-        gratitude: document.getElementById('jGratitude')?.value || '',
-        notes: document.getElementById('jNotes')?.value || ''
-      };
-
-      await saveJournal(entry);
     }
 
     function exportData() {
