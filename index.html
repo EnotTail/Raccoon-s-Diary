@@ -15,7 +15,6 @@
       --button-text: var(--tg-theme-button-text-color, #ffffff);
       --secondary-bg: var(--tg-theme-secondary-bg-color, #f5f5f5);
       
-      /* Category colors */
       --cat-work: #4A90D9;
       --cat-health: #5CB85C;
       --cat-study: #F0AD4E;
@@ -25,26 +24,10 @@
     
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    @keyframes scaleIn {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    
-    @keyframes checkPop {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-      100% { transform: scale(1); }
-    }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes checkPop { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
     
     body {
       background: var(--bg);
@@ -60,7 +43,6 @@
     
     .hidden { display: none !important; }
     
-    /* Header */
     .header {
       padding: 12px 16px;
       background: var(--bg);
@@ -80,10 +62,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .header-right {
-      display: flex;
-      gap: 8px;
-    }
+    .header-right { display: flex; gap: 8px; }
     .icon-btn {
       width: 40px;
       height: 40px;
@@ -119,7 +98,6 @@
     .week-nav button:active { background: var(--link); color: white; }
     .week-nav span { font-size: 14px; color: var(--hint); flex: 1; text-align: center; font-weight: 500; }
     
-    /* Tabs */
     .tabs {
       display: flex;
       background: var(--bg);
@@ -154,7 +132,6 @@
     .tab .progress { font-size: 11px; display: block; margin-top: 2px; opacity: 0.7; }
     .tab.active .progress { opacity: 1; }
     
-    /* Content */
     .content { 
       flex: 1; 
       overflow-y: auto; 
@@ -162,7 +139,6 @@
       animation: slideUp 0.4s ease;
     }
     
-    /* Progress ring */
     .progress-section {
       display: flex;
       align-items: center;
@@ -199,7 +175,6 @@
     .progress-info h3 { font-size: 17px; font-weight: 700; }
     .progress-info p { font-size: 14px; color: var(--hint); margin-top: 6px; }
     
-    /* Tasks */
     .section-title {
       font-size: 13px;
       font-weight: 700;
@@ -272,7 +247,6 @@
     .cat-hobby .task-category { background: rgba(155,89,182,0.12); color: var(--cat-hobby); }
     .cat-other .task-category { background: rgba(149,165,166,0.12); color: var(--cat-other); }
     
-    /* FAB */
     .fab {
       position: fixed;
       bottom: 90px;
@@ -296,7 +270,6 @@
     .fab:active { transform: scale(0.9); box-shadow: 0 3px 10px rgba(36,129,204,0.3); }
     .fab.hidden { display: none; }
     
-    /* Bottom nav */
     .bottom-nav {
       display: flex;
       background: var(--bg);
@@ -330,7 +303,6 @@
       border-radius: 0 0 3px 3px;
     }
     
-    /* Modal */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -386,7 +358,6 @@
     .input-group textarea { min-height: 100px; resize: vertical; }
     .input-group input[type="time"] { padding: 12px 18px; }
     
-    /* Day selector */
     .day-selector {
       display: flex;
       gap: 8px;
@@ -456,7 +427,6 @@
       margin-top: 8px;
     }
     
-    /* Journal */
     .journal-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -520,7 +490,6 @@
       min-height: 60px;
     }
     
-    /* Settings */
     .setting-row {
       display: flex;
       justify-content: space-between;
@@ -535,7 +504,6 @@
     .setting-row .label { font-size: 16px; font-weight: 600; }
     .setting-row .value { font-size: 15px; color: var(--hint); font-weight: 500; }
     
-    /* Empty state */
     .empty {
       text-align: center;
       padding: 60px 20px;
@@ -546,7 +514,6 @@
     .empty p { font-size: 16px; line-height: 1.6; }
     .empty .sub { font-size: 14px; margin-top: 8px; opacity: 0.7; }
     
-    /* Toast */
     .toast {
       position: fixed;
       top: 20px;
@@ -566,7 +533,6 @@
   </style>
 </head>
 <body>
-  <!-- SVG Gradient -->
   <svg width="0" height="0" style="position:absolute">
     <defs>
       <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -576,10 +542,8 @@
     </defs>
   </svg>
 
-  <!-- Toast -->
   <div class="toast" id="toast"></div>
 
-  <!-- Header -->
   <div class="header">
     <div class="header-left">
       <h1>🦝 Енотов Ежедневник</h1>
@@ -594,36 +558,26 @@
     </div>
   </div>
 
-  <!-- Day Tabs -->
   <div class="tabs" id="daysTabs"></div>
-
-  <!-- Content -->
   <div class="content" id="content"></div>
 
-  <!-- FAB -->
   <button class="fab" id="fab" onclick="openAddTask()">+</button>
 
-  <!-- Bottom Nav -->
   <div class="bottom-nav">
     <button class="nav-item active" onclick="setScreen('day')">
-      <span class="icon">📋</span>
-      День
+      <span class="icon">📋</span>День
     </button>
     <button class="nav-item" onclick="setScreen('week')">
-      <span class="icon">📅</span>
-      Неделя
+      <span class="icon">📅</span>Неделя
     </button>
     <button class="nav-item" onclick="setScreen('journal')">
-      <span class="icon">📝</span>
-      Дневник
+      <span class="icon">📝</span>Дневник
     </button>
     <button class="nav-item" onclick="setScreen('stats')">
-      <span class="icon">📊</span>
-      Аналитика
+      <span class="icon">📊</span>Аналитика
     </button>
   </div>
 
-  <!-- Modal -->
   <div class="modal-overlay" id="modal" onclick="closeModal(event)">
     <div class="modal-sheet" onclick="event.stopPropagation()">
       <div id="modalContent"></div>
@@ -631,13 +585,11 @@
   </div>
 
   <script>
-    // ===== CONFIG =====
     const CONFIG = {
       SUPABASE_URL: 'https://rayhnludfxhzeaacjfco.supabase.co',
-      SUPABASE_ANON_KEY: 'sb_publishable_w_tY_r2JHCJ9P0i8vn35Tg_rPO0EPoI'
+      SUPABASE_ANON_KEY: 'ВСТАВЬ_СЮДА_ANON_KEY'
     };
 
-    // ===== TELEGRAM =====
     const tg = window.Telegram.WebApp;
     tg.expand();
     tg.setHeaderColor(tg.themeParams.bg_color);
@@ -648,11 +600,8 @@
     const firstName = user?.first_name || 'Друг';
     const username = user?.username || '';
 
-    if (!telegramId) {
-      showToast('Ошибка: откройте через бота @Raccoons_Diary_bot');
-    }
+    if (!telegramId) showToast('Ошибка: откройте через бота @Raccoons_Diary_bot');
 
-    // ===== STATE =====
     let currentWeek = getWeekNumber(new Date());
     let currentYear = new Date().getFullYear();
     let selectedDay = new Date().getDay();
@@ -660,11 +609,11 @@
     let tasks = {};
     let journalData = {};
     let userSettings = {};
+    let selectedDaysForNewTask = [selectedDay];
 
     const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
     const fullDayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
 
-    // ===== HELPERS =====
     function getWeekNumber(d) {
       d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
       d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
@@ -702,7 +651,6 @@
       setTimeout(() => t.classList.remove('show'), 2500);
     }
 
-    // ===== SUPABASE API =====
     async function supabaseRequest(table, method, body, query) {
       let url = `${CONFIG.SUPABASE_URL}/rest/v1/${table}`;
       if (query) url += '?' + query;
@@ -740,7 +688,6 @@
       }
     }
 
-    // ===== LOAD DATA =====
     async function loadData() {
       if (!telegramId) return;
 
@@ -823,30 +770,37 @@
       }));
     }
 
-    // ===== SAVE TO SERVER =====
+    // ===== SAVE TO SERVER — ИСПРАВЛЕНО =====
     async function saveTask(task) {
       if (!telegramId) return;
 
-      console.log('[saveTask] Sending:', task);
+      console.log('[saveTask] Saving for days:', task.days);
 
-      try {
-        await supabaseRequest('tasks', 'POST', {
-          id: task.id,
+      // Сохраняем задачу для КАЖДОГО выбранного дня
+      for (const day of task.days) {
+        const taskForDay = {
+          id: task.id + '_' + day,
           telegram_id: telegramId,
           text: task.text,
           category: task.category,
           type: task.type,
-          days: JSON.stringify(task.days || [selectedDay]),
+          days: JSON.stringify(task.days),
           week: currentWeek,
           year: currentYear,
-          day: selectedDay,
+          day: day,
           done: task.done || false
-        });
-        showToast('Задача сохранена!');
-        tg.HapticFeedback?.impactOccurred('light');
-      } catch (e) {
-        console.error('[saveTask] Failed:', e);
+        };
+        
+        try {
+          await supabaseRequest('tasks', 'POST', taskForDay);
+          console.log(`[saveTask] OK day ${day}`);
+        } catch (e) {
+          console.error(`[saveTask] FAIL day ${day}:`, e);
+        }
       }
+      
+      showToast('Задача сохранена!');
+      tg.HapticFeedback?.impactOccurred('light');
     }
 
     async function toggleTask(taskId, done) {
@@ -903,7 +857,6 @@
       } catch (e) {}
     }
 
-    // ===== RENDER =====
     function render() {
       renderTabs();
       renderContent();
@@ -926,10 +879,7 @@
 
         const btn = document.createElement('button');
         btn.className = 'tab' + (isToday ? ' active' : '');
-        btn.innerHTML = `
-          ${dayNames[dayNum]}
-          <span class="progress">${progress}%</span>
-        `;
+        btn.innerHTML = `${dayNames[dayNum]}<span class="progress">${progress}%</span>`;
         btn.onclick = () => { selectedDay = dayNum; render(); };
         container.appendChild(btn);
       }
@@ -946,7 +896,6 @@
     function renderContent() {
       const content = document.getElementById('content');
       content.innerHTML = '';
-
       if (currentScreen === 'day') renderDay(content);
       else if (currentScreen === 'week') renderWeek(content);
       else if (currentScreen === 'journal') renderJournal(content);
@@ -1119,7 +1068,6 @@
       `;
     }
 
-    // ===== ACTIONS =====
     function setScreen(screen) {
       currentScreen = screen;
       document.querySelectorAll('.nav-item').forEach((el, i) => {
@@ -1152,7 +1100,6 @@
       render();
     }
 
-    // ===== MODALS =====
     function openModal(html) {
       document.getElementById('modalContent').innerHTML = html;
       document.getElementById('modal').classList.add('active');
@@ -1163,9 +1110,6 @@
         document.getElementById('modal').classList.remove('active');
       }
     }
-
-    // ===== ADD TASK WITH DAY SELECTOR =====
-    let selectedDaysForNewTask = [selectedDay];
 
     function openAddTask() {
       selectedDaysForNewTask = [selectedDay];
@@ -1241,6 +1185,7 @@
       }
     }
 
+    // ===== ИСПРАВЛЕННЫЙ addTask =====
     async function addTask() {
       const text = document.getElementById('taskText').value.trim();
       const category = document.getElementById('taskCategory').value;
@@ -1260,11 +1205,18 @@
         days: selectedDaysForNewTask
       };
 
-      console.log('[addTask] Creating:', task);
+      console.log('[addTask] Creating for days:', selectedDaysForNewTask);
 
+      // Добавляем в localStorage для КАЖДОГО выбранного дня
       if (!tasks[currentWeek]) tasks[currentWeek] = {};
-      if (!tasks[currentWeek][selectedDay]) tasks[currentWeek][selectedDay] = [];
-      tasks[currentWeek][selectedDay].push(task);
+      
+      for (const day of selectedDaysForNewTask) {
+        if (!tasks[currentWeek][day]) tasks[currentWeek][day] = [];
+        tasks[currentWeek][day].push({
+          ...task,
+          id: task.id + '_' + day
+        });
+      }
 
       saveLocal();
       await saveTask(task);
@@ -1304,6 +1256,7 @@
     }
 
     async function removeTask(taskId) {
+      // Удаляем из localStorage
       const dayTasks = tasks[currentWeek]?.[selectedDay] || [];
       tasks[currentWeek][selectedDay] = dayTasks.filter(t => t.id !== taskId);
 
@@ -1315,7 +1268,6 @@
       render();
     }
 
-    // ===== SETTINGS =====
     function openSettings() {
       const morning = userSettings.notify_morning || '08:00';
       const evening = userSettings.notify_evening || '21:00';
@@ -1354,7 +1306,6 @@
       document.getElementById('modal').classList.remove('active');
     }
 
-    // ===== JOURNAL =====
     function editJournalValue(field, label, min, max) {
       const today = new Date().toISOString().split('T')[0];
       const entry = journalData[today] || {};
@@ -1394,7 +1345,6 @@
       await saveJournal(entry);
     }
 
-    // ===== EXPORT / IMPORT =====
     function exportData() {
       const data = {
         tasks,
@@ -1442,7 +1392,6 @@
       }
     }
 
-    // ===== INIT =====
     document.addEventListener('DOMContentLoaded', () => {
       if (telegramId) {
         loadData();
