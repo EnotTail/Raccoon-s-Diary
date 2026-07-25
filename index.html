@@ -14,21 +14,17 @@
       --button: var(--tg-theme-button-color, #2481cc);
       --button-text: var(--tg-theme-button-text-color, #ffffff);
       --secondary-bg: var(--tg-theme-secondary-bg-color, #f5f5f5);
-      
       --cat-work: #4A90D9;
       --cat-health: #5CB85C;
       --cat-study: #F0AD4E;
       --cat-hobby: #9B59B6;
       --cat-other: #95A5A6;
     }
-    
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    
     @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     @keyframes checkPop { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
-    
     body {
       background: var(--bg);
       color: var(--text);
@@ -40,9 +36,7 @@
       display: flex;
       flex-direction: column;
     }
-    
     .hidden { display: none !important; }
-    
     .header {
       padding: 12px 16px;
       background: var(--bg);
@@ -55,9 +49,9 @@
       justify-content: space-between;
       animation: fadeIn 0.3s ease;
     }
-    .header-left h1 { 
-      font-size: 20px; 
-      font-weight: 700; 
+    .header-left h1 {
+      font-size: 20px;
+      font-weight: 700;
       background: linear-gradient(135deg, var(--link), #6B5CE7);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -77,7 +71,6 @@
       transition: transform 0.2s, background 0.2s;
     }
     .icon-btn:active { transform: scale(0.9); background: rgba(0,0,0,0.1); }
-    
     .week-nav {
       display: flex;
       align-items: center;
@@ -97,7 +90,6 @@
     }
     .week-nav button:active { background: var(--link); color: white; }
     .week-nav span { font-size: 14px; color: var(--hint); flex: 1; text-align: center; font-weight: 500; }
-    
     .tabs {
       display: flex;
       background: var(--bg);
@@ -124,21 +116,19 @@
       transition: all 0.2s;
     }
     .tab:hover { background: rgba(0,0,0,0.03); }
-    .tab.active { 
-      color: var(--link); 
-      font-weight: 600; 
+    .tab.active {
+      color: var(--link);
+      font-weight: 600;
       background: rgba(36,129,204,0.08);
     }
     .tab .progress { font-size: 11px; display: block; margin-top: 2px; opacity: 0.7; }
     .tab.active .progress { opacity: 1; }
-    
-    .content { 
-      flex: 1; 
-      overflow-y: auto; 
-      padding: 16px; 
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
       animation: slideUp 0.4s ease;
     }
-    
     .progress-section {
       display: flex;
       align-items: center;
@@ -157,11 +147,11 @@
     }
     .ring svg { transform: rotate(-90deg); filter: drop-shadow(0 2px 8px rgba(36,129,204,0.2)); }
     .ring-bg { fill: none; stroke: rgba(0,0,0,0.06); stroke-width: 10; }
-    .ring-fill { 
-      fill: none; 
-      stroke: url(#gradient); 
-      stroke-width: 10; 
-      stroke-linecap: round; 
+    .ring-fill {
+      fill: none;
+      stroke: url(#gradient);
+      stroke-width: 10;
+      stroke-linecap: round;
       transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .ring-text {
@@ -174,7 +164,6 @@
     }
     .progress-info h3 { font-size: 17px; font-weight: 700; }
     .progress-info p { font-size: 14px; color: var(--hint); margin-top: 6px; }
-    
     .section-title {
       font-size: 13px;
       font-weight: 700;
@@ -202,7 +191,6 @@
     .task-item.cat-study { border-left-color: var(--cat-study); }
     .task-item.cat-hobby { border-left-color: var(--cat-hobby); }
     .task-item.cat-other { border-left-color: var(--cat-other); }
-    
     .task-checkbox {
       width: 26px;
       height: 26px;
@@ -227,9 +215,9 @@
       font-weight: 800;
     }
     .task-text { flex: 1; font-size: 15px; font-weight: 500; transition: all 0.3s; }
-    .task-item.done .task-text { 
-      text-decoration: line-through; 
-      color: var(--hint); 
+    .task-item.done .task-text {
+      text-decoration: line-through;
+      color: var(--hint);
       opacity: 0.6;
     }
     .task-category {
@@ -246,7 +234,6 @@
     .cat-study .task-category { background: rgba(240,173,78,0.12); color: var(--cat-study); }
     .cat-hobby .task-category { background: rgba(155,89,182,0.12); color: var(--cat-hobby); }
     .cat-other .task-category { background: rgba(149,165,166,0.12); color: var(--cat-other); }
-    
     .fab {
       position: fixed;
       bottom: 90px;
@@ -269,7 +256,6 @@
     }
     .fab:active { transform: scale(0.9); box-shadow: 0 3px 10px rgba(36,129,204,0.3); }
     .fab.hidden { display: none; }
-    
     .bottom-nav {
       display: flex;
       background: var(--bg);
@@ -302,7 +288,6 @@
       background: var(--link);
       border-radius: 0 0 3px 3px;
     }
-    
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -328,14 +313,13 @@
     }
     .modal-overlay.active .modal-sheet { transform: translateY(0); }
     .modal-title { font-size: 22px; font-weight: 800; margin-bottom: 20px; }
-    
     .input-group { margin-bottom: 18px; }
-    .input-group label { 
-      display: block; 
-      font-size: 13px; 
+    .input-group label {
+      display: block;
+      font-size: 13px;
       font-weight: 600;
-      color: var(--hint); 
-      margin-bottom: 8px; 
+      color: var(--hint);
+      margin-bottom: 8px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -357,7 +341,6 @@
     }
     .input-group textarea { min-height: 100px; resize: vertical; }
     .input-group input[type="time"] { padding: 12px 18px; }
-    
     .day-selector {
       display: flex;
       gap: 8px;
@@ -381,7 +364,6 @@
       border-color: var(--link);
     }
     .day-chip:active { transform: scale(0.95); }
-    
     .btn-primary {
       width: 100%;
       padding: 16px;
@@ -396,9 +378,9 @@
       transition: all 0.2s;
       box-shadow: 0 4px 12px rgba(36,129,204,0.3);
     }
-    .btn-primary:active { 
-      transform: translateY(2px); 
-      box-shadow: 0 2px 6px rgba(36,129,204,0.2); 
+    .btn-primary:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 6px rgba(36,129,204,0.2);
     }
     .btn-secondary {
       width: 100%;
@@ -426,70 +408,6 @@
       cursor: pointer;
       margin-top: 8px;
     }
-    
-    /* ===== WHEEL PICKER ===== */
-    .wheel-picker {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-      padding: 20px 0;
-      position: relative;
-    }
-    .wheel-column {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      max-height: 200px;
-      overflow-y: auto;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
-      scroll-snap-type: y mandatory;
-      padding: 80px 0;
-    }
-    .wheel-column::-webkit-scrollbar { display: none; }
-    .wheel-item {
-      width: 60px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      font-weight: 600;
-      color: var(--hint);
-      border-radius: 10px;
-      scroll-snap-align: center;
-      transition: all 0.2s;
-    }
-    .wheel-item.selected {
-      font-size: 32px;
-      font-weight: 800;
-      color: var(--link);
-      background: rgba(36,129,204,0.08);
-    }
-    .wheel-label {
-      font-size: 13px;
-      color: var(--hint);
-      font-weight: 600;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .wheel-center-line {
-      position: absolute;
-      top: 50%;
-      left: 20%;
-      right: 20%;
-      height: 44px;
-      border-top: 2px solid var(--link);
-      border-bottom: 2px solid var(--link);
-      border-radius: 10px;
-      pointer-events: none;
-      transform: translateY(-50%);
-      opacity: 0.3;
-    }
-    
-    /* ===== JOURNAL ===== */
     .journal-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -508,9 +426,9 @@
     }
     .journal-card:active { transform: scale(0.96); }
     .journal-card:hover { border-color: rgba(36,129,204,0.2); }
-    .journal-card .value { 
-      font-size: 32px; 
-      font-weight: 800; 
+    .journal-card .value {
+      font-size: 32px;
+      font-weight: 800;
       background: linear-gradient(135deg, var(--link), #6B5CE7);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -522,7 +440,6 @@
       opacity: 0.6;
       margin-top: 4px;
     }
-    
     .journal-field {
       display: flex;
       align-items: center;
@@ -562,9 +479,6 @@
       color: var(--link);
       flex-shrink: 0;
     }
-    .journal-field.has-value .field-value { color: var(--text); }
-    .journal-field.has-value .field-info .preview { color: var(--text); }
-    
     .editor-fullscreen {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -612,12 +526,7 @@
       padding: 8px 0;
     }
     .editor-body textarea::placeholder { color: var(--hint); opacity: 0.6; }
-    .editor-footer {
-      padding: 16px;
-      border-top: 1px solid rgba(0,0,0,0.05);
-    }
-    
-    /* ===== ANALYTICS ===== */
+    .editor-footer { padding: 16px; border-top: 1px solid rgba(0,0,0,0.05); }
     .analytics-header {
       text-align: center;
       padding: 20px;
@@ -632,12 +541,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .analytics-header .label {
-      font-size: 14px;
-      color: var(--hint);
-      margin-top: 4px;
-    }
-    
+    .analytics-header .label { font-size: 14px; color: var(--hint); margin-top: 4px; }
     .stat-row {
       display: flex;
       align-items: center;
@@ -663,17 +567,14 @@
     .stat-icon.green { background: rgba(92,184,92,0.12); }
     .stat-icon.orange { background: rgba(240,173,78,0.12); }
     .stat-icon.purple { background: rgba(155,89,182,0.12); }
-    
     .stat-info { flex: 1; }
     .stat-info .title { font-size: 15px; font-weight: 600; }
     .stat-info .subtitle { font-size: 13px; color: var(--hint); margin-top: 2px; }
-    
     .stat-value {
       font-size: 20px;
       font-weight: 800;
       color: var(--text);
     }
-    
     .progress-bar-bg {
       width: 100%;
       height: 8px;
@@ -690,7 +591,6 @@
     .progress-bar-fill.blue { background: linear-gradient(90deg, var(--link), #6B5CE7); }
     .progress-bar-fill.green { background: linear-gradient(90deg, #5CB85C, #7ED957); }
     .progress-bar-fill.orange { background: linear-gradient(90deg, #F0AD4E, #FFD700); }
-    
     .category-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -703,10 +603,7 @@
       text-align: center;
       background: var(--secondary-bg);
     }
-    .category-card .count {
-      font-size: 28px;
-      font-weight: 800;
-    }
+    .category-card .count { font-size: 28px; font-weight: 800; }
     .category-card .name {
       font-size: 13px;
       color: var(--hint);
@@ -714,7 +611,6 @@
       font-weight: 600;
       text-transform: uppercase;
     }
-    
     .setting-row {
       display: flex;
       justify-content: space-between;
@@ -728,7 +624,30 @@
     .setting-row:active { background: rgba(0,0,0,0.08); }
     .setting-row .label { font-size: 16px; font-weight: 600; }
     .setting-row .value { font-size: 15px; color: var(--hint); font-weight: 500; }
-    
+    .toggle {
+      width: 52px;
+      height: 32px;
+      background: var(--hint);
+      border-radius: 16px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s;
+      flex-shrink: 0;
+    }
+    .toggle.active { background: var(--link); }
+    .toggle::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 28px;
+      height: 28px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+    .toggle.active::after { transform: translateX(20px); }
     .empty {
       text-align: center;
       padding: 60px 20px;
@@ -738,7 +657,6 @@
     .empty .icon { font-size: 64px; margin-bottom: 16px; display: block; }
     .empty p { font-size: 16px; line-height: 1.6; }
     .empty .sub { font-size: 14px; margin-top: 8px; opacity: 0.7; }
-    
     .toast {
       position: fixed;
       top: 20px;
@@ -755,6 +673,54 @@
       backdrop-filter: blur(10px);
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
+    .wheel-picker-wrap {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+    .wheel-picker {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow-y: scroll;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: y mandatory;
+      padding: 88px 0;
+    }
+    .wheel-picker::-webkit-scrollbar { display: none; }
+    .wheel-item {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--hint);
+      scroll-snap-align: center;
+      transition: all 0.2s;
+    }
+    .wheel-item.selected {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--link);
+    }
+    .wheel-center {
+      position: absolute;
+      top: 50%;
+      left: 20%;
+      right: 20%;
+      height: 44px;
+      transform: translateY(-50%);
+      border-top: 2px solid var(--link);
+      border-bottom: 2px solid var(--link);
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0.25;
+    }
   </style>
 </head>
 <body>
@@ -809,7 +775,6 @@
     </div>
   </div>
 
-  <!-- Полноэкранный редактор -->
   <div class="editor-fullscreen" id="editorFullscreen">
     <div class="editor-header">
       <span class="editor-title" id="editorTitle">Редактор</span>
@@ -854,6 +819,7 @@
 
     const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
     const fullDayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+
     const fieldConfig = {
       lesson: { icon: '💡', title: 'Урок дня', placeholder: 'Чему научился сегодня?' },
       gratitude: { icon: '🙏', title: 'За что благодарен', placeholder: 'За что thankful?' },
@@ -903,28 +869,24 @@
       const opts = {
         method,
         headers: {
-          'apikey': CONFIG.SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`,
+          apikey: CONFIG.SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${CONFIG.SUPABASE_ANON_KEY}`,
           'Content-Type': 'application/json'
         }
       };
       if (body) opts.body = JSON.stringify(body);
       if (method === 'POST' || method === 'PATCH') {
-        opts.headers['Prefer'] = 'resolution=merge-duplicates';
+        opts.headers.Prefer = 'resolution=merge-duplicates';
       }
-      
       console.log(`[Supabase] ${method} ${table}`, body || query || '');
-      
       try {
         const res = await fetch(url, opts);
         const text = await res.text();
-        
         if (!res.ok) {
           console.error(`[Supabase ERROR] ${res.status}:`, text);
           showToast(`Ошибка: ${res.status}`);
           throw new Error(text);
         }
-        
         console.log(`[Supabase OK] ${table}:`, text.substring(0, 200));
         return text ? JSON.parse(text) : null;
       } catch (e) {
@@ -936,7 +898,6 @@
 
     async function loadData() {
       if (!telegramId) return;
-
       const cached = localStorage.getItem(`enot_${telegramId}`);
       if (cached) {
         try {
@@ -946,7 +907,6 @@
           userSettings = data.settings || {};
         } catch (e) {}
       }
-
       try {
         await supabaseRequest('users', 'POST', {
           telegram_id: telegramId,
@@ -954,27 +914,20 @@
           first_name: firstName
         });
       } catch (e) {}
-
       try {
         const settings = await supabaseRequest('users', 'GET', null, `telegram_id=eq.${telegramId}`);
         if (settings && settings[0]) userSettings = settings[0];
       } catch (e) {}
-
       try {
         await syncFromServer();
       } catch (e) {
         console.error('Sync error:', e);
       }
-
       render();
     }
 
-    // ===== ИСПРАВЛЕННЫЙ syncFromServer — НЕ затирает localStorage =====
     async function syncFromServer() {
       if (!telegramId) return;
-
-      console.log('[syncFromServer] Fetching week:', currentWeek, 'year:', currentYear);
-
       try {
         const tasksData = await supabaseRequest(
           'tasks',
@@ -982,56 +935,29 @@
           null,
           `telegram_id=eq.${telegramId}&week=eq.${currentWeek}&year=eq.${currentYear}`
         );
-
-        console.log('[syncFromServer] Got tasks:', tasksData?.length || 0);
-
-        // ⚠️ ГЛАВНОЕ: если Supabase пустой или ошибка — НЕ трогаем localStorage
         if (!tasksData || tasksData.length === 0) {
-          console.log('[syncFromServer] Supabase empty for week', currentWeek, ', keeping local data');
+          console.log('[sync] Supabase empty for week', currentWeek, ', keeping local');
           return;
         }
-
-        // Создаём неделю только если её ещё нет
-        if (!tasks[currentWeek]) {
-          tasks[currentWeek] = {};
-        }
-
-        // НЕ очищаем существующие дни — только мержим с сервером
+        tasks[currentWeek] = tasks[currentWeek] || {};
         tasksData.forEach(t => {
           if (!tasks[currentWeek][t.day]) tasks[currentWeek][t.day] = [];
-          
-          // Ищем существующую задачу по ID
           const existingIndex = tasks[currentWeek][t.day].findIndex(existing => existing.id === t.id);
-          
           if (existingIndex >= 0) {
-            // Обновляем существующую
             tasks[currentWeek][t.day][existingIndex] = {
-              id: t.id,
-              text: t.text,
-              done: t.done,
-              category: t.category,
-              type: t.type
+              id: t.id, text: t.text, done: t.done, category: t.category, type: t.type
             };
           } else {
-            // Добавляем новую
             tasks[currentWeek][t.day].push({
-              id: t.id,
-              text: t.text,
-              done: t.done,
-              category: t.category,
-              type: t.type
+              id: t.id, text: t.text, done: t.done, category: t.category, type: t.type
             });
           }
         });
-
-        console.log('[syncFromServer] Merged week', currentWeek, 'with', tasksData.length, 'tasks from server');
-
+        console.log('[sync] Updated week', currentWeek, 'with', tasksData.length, 'tasks');
       } catch (e) {
-        console.error('[syncFromServer] Error, keeping local data:', e);
+        console.error('[sync] Error, keeping local:', e);
         return;
       }
-
-      // Журнал
       try {
         const today = new Date().toISOString().split('T')[0];
         const journalRes = await supabaseRequest(
@@ -1042,23 +968,18 @@
         );
         if (journalRes && journalRes[0]) journalData[today] = journalRes[0];
       } catch (e) {}
-
       saveLocal();
     }
 
     function saveLocal() {
-      localStorage.setItem(`enot_${telegramId}`, JSON.stringify({ 
-        tasks, 
-        journal: journalData,
-        settings: userSettings 
+      localStorage.setItem(`enot_${telegramId}`, JSON.stringify({
+        tasks, journal: journalData, settings: userSettings
       }));
     }
 
     async function saveTask(task) {
       if (!telegramId) return;
-
       console.log('[saveTask] Saving for days:', task.days);
-
       for (const day of task.days) {
         const taskForDay = {
           id: task.id + '_' + day,
@@ -1072,7 +993,6 @@
           day: day,
           done: task.done || false
         };
-        
         try {
           await supabaseRequest('tasks', 'POST', taskForDay);
           console.log(`[saveTask] OK day ${day}`);
@@ -1080,7 +1000,6 @@
           console.error(`[saveTask] FAIL day ${day}:`, e);
         }
       }
-      
       showToast('Задача сохранена!');
       tg.HapticFeedback?.impactOccurred('light');
     }
@@ -1102,7 +1021,6 @@
 
     async function saveJournal(entry) {
       if (!telegramId) return;
-
       const today = new Date().toISOString().split('T')[0];
       try {
         await supabaseRequest('journal', 'POST', {
@@ -1118,8 +1036,8 @@
           week: currentWeek,
           year: currentYear
         });
-
         journalData[today] = entry;
+        pendingJournal = {};
         saveLocal();
         showToast('Дневник сохранён!');
         tg.HapticFeedback?.impactOccurred('light');
@@ -1130,7 +1048,6 @@
 
     async function saveSettings(settings) {
       if (!telegramId) return;
-
       try {
         await supabaseRequest('users', 'PATCH', settings, `telegram_id=eq.${telegramId}`);
         Object.assign(userSettings, settings);
@@ -1148,7 +1065,6 @@
     function renderTabs() {
       const container = document.getElementById('daysTabs');
       const weekStart = getDateOfISOWeek(currentWeek, currentYear);
-      
       container.innerHTML = '';
       for (let i = 0; i < 7; i++) {
         const d = new Date(weekStart);
@@ -1158,7 +1074,6 @@
         const dayTasks = (tasks[currentWeek]?.[dayNum] || []).filter(t => !t.done);
         const totalTasks = (tasks[currentWeek]?.[dayNum] || []).length;
         const progress = totalTasks > 0 ? Math.round(((totalTasks - dayTasks.length) / totalTasks) * 100) : 0;
-
         const btn = document.createElement('button');
         btn.className = 'tab' + (isToday ? ' active' : '');
         btn.innerHTML = `${dayNames[dayNum]}<span class="progress">${progress}%</span>`;
@@ -1189,10 +1104,8 @@
       const doneCount = dayTasks.filter(t => t.done).length;
       const totalCount = dayTasks.length;
       const percent = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
-
       const circumference = 2 * Math.PI * 36;
       const offset = circumference - (percent / 100) * circumference;
-
       container.innerHTML = `
         <div class="progress-section">
           <div class="ring">
@@ -1209,7 +1122,6 @@
           </div>
         </div>
       `;
-
       if (dayTasks.length === 0) {
         container.innerHTML += `
           <div class="empty">
@@ -1220,9 +1132,7 @@
         `;
         return;
       }
-
       container.innerHTML += `<div class="section-title">Задачи</div>`;
-
       dayTasks.forEach((task, i) => {
         const div = document.createElement('div');
         div.className = `task-item cat-${task.category}` + (task.done ? ' done' : '');
@@ -1239,7 +1149,6 @@
 
     function renderWeek(container) {
       const weekStart = getDateOfISOWeek(currentWeek, currentYear);
-      
       for (let i = 0; i < 7; i++) {
         const dayNum = i === 6 ? 0 : i + 1;
         const d = new Date(weekStart);
@@ -1248,7 +1157,6 @@
         const doneCount = dayTasks.filter(t => t.done).length;
         const totalCount = dayTasks.length;
         const percent = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
-
         const card = document.createElement('div');
         card.className = 'task-item';
         card.style.cursor = 'pointer';
@@ -1264,15 +1172,12 @@
       }
     }
 
-    // ===== JOURNAL =====
     function renderJournal(container) {
       const today = new Date().toISOString().split('T')[0];
       const entry = journalData[today] || {};
       const display = { ...entry, ...pendingJournal };
-
       container.innerHTML = `
         <div class="section-title">Сегодня, ${formatDate(new Date())}</div>
-        
         <div class="journal-grid">
           <div class="journal-card" onclick="openWheelPicker('sleep', 'Сон (часы)', 0, 12)">
             <div class="value">${display.sleep ?? '-'}</div>
@@ -1290,46 +1195,41 @@
             <div class="range-hint">1–10</div>
           </div>
         </div>
-
         <div class="section-title">Заметки</div>
-        <div class="journal-field ${display.lesson ? 'has-value' : ''}" onclick="openEditor('lesson')">
+        <div class="journal-field" onclick="openEditor('lesson')">
           <div class="field-icon" style="background:rgba(240,173,78,0.12)">💡</div>
           <div class="field-info">
             <div class="title">Урок дня</div>
             <div class="preview">${display.lesson || 'Нажми, чтобы написать...'}</div>
           </div>
         </div>
-        <div class="journal-field ${display.gratitude ? 'has-value' : ''}" onclick="openEditor('gratitude')">
+        <div class="journal-field" onclick="openEditor('gratitude')">
           <div class="field-icon" style="background:rgba(155,89,182,0.12)">🙏</div>
           <div class="field-info">
             <div class="title">За что благодарен</div>
             <div class="preview">${display.gratitude || 'Нажми, чтобы написать...'}</div>
           </div>
         </div>
-        <div class="journal-field ${display.notes ? 'has-value' : ''}" onclick="openEditor('notes')">
+        <div class="journal-field" onclick="openEditor('notes')">
           <div class="field-icon" style="background:rgba(74,144,217,0.12)">📝</div>
           <div class="field-info">
             <div class="title">Заметки</div>
             <div class="preview">${display.notes || 'Нажми, чтобы написать...'}</div>
           </div>
         </div>
-
         <button class="btn-primary" onclick="saveJournalFromPending()">💾 Сохранить дневник</button>
       `;
     }
 
-    // ===== ПОЛНОЭКРАННЫЙ РЕДАКТОР =====
     function openEditor(field) {
       editorField = field;
       const cfg = fieldConfig[field];
       const today = new Date().toISOString().split('T')[0];
       const currentValue = pendingJournal[field] ?? journalData[today]?.[field] ?? '';
-      
       document.getElementById('editorTitle').textContent = cfg.title;
       const ta = document.getElementById('editorTextarea');
       ta.value = currentValue;
       ta.placeholder = cfg.placeholder;
-      
       document.getElementById('editorFullscreen').classList.add('active');
       setTimeout(() => ta.focus(), 100);
     }
@@ -1343,11 +1243,9 @@
       const value = document.getElementById('editorTextarea').value.trim();
       if (editorField) {
         pendingJournal[editorField] = value;
-        
         const today = new Date().toISOString().split('T')[0];
         if (!journalData[today]) journalData[today] = {};
         journalData[today][editorField] = value;
-        
         saveLocal();
         showToast('Сохранено');
         closeEditor();
@@ -1355,56 +1253,79 @@
       }
     }
 
-    // ===== WHEEL PICKER =====
-    let wheelValue = 5;
+    let wheelField = null;
+    let wheelMin = 0;
+    let wheelMax = 10;
 
     function openWheelPicker(field, label, min, max) {
+      wheelField = field;
+      wheelMin = min;
+      wheelMax = max;
       const today = new Date().toISOString().split('T')[0];
-      wheelValue = pendingJournal[field] ?? journalData[today]?.[field] ?? Math.floor((min + max) / 2);
-      
+      const currentVal = pendingJournal[field] ?? journalData[today]?.[field] ?? Math.floor((min + max) / 2);
       let items = '';
       for (let i = min; i <= max; i++) {
-        items += `<div class="wheel-item ${i === wheelValue ? 'selected' : ''}" data-val="${i}" onclick="selectWheelValue(${i})">${i}</div>`;
+        items += `<div class="wheel-item" data-val="${i}">${i}</div>`;
       }
-
       openModal(`
         <div class="modal-title">${label}</div>
-        <div style="text-align:center;margin-bottom:12px;">
-          <span style="font-size:14px;color:var(--hint);">Прокрути и выбери</span>
+        <div style="text-align:center;margin-bottom:8px">
+          <span style="font-size:14px;color:var(--hint)">Прокрути и выбери</span>
         </div>
-        <div class="wheel-picker">
-          <div class="wheel-center-line"></div>
-          <div class="wheel-column" id="wheelColumn">
-            ${items}
-          </div>
+        <div class="wheel-picker-wrap">
+          <div class="wheel-center"></div>
+          <div class="wheel-picker" id="wheelPicker">${items}</div>
         </div>
-        <button class="btn-primary" onclick="confirmWheelValue('${field}')">Сохранить</button>
+        <button class="btn-primary" onclick="confirmWheelValue()">Сохранить</button>
       `);
-
       setTimeout(() => {
-        const selected = document.querySelector('.wheel-item.selected');
-        if (selected) selected.scrollIntoView({ behavior: 'instant', block: 'center' });
+        const picker = document.getElementById('wheelPicker');
+        const targetVal = Math.max(min, Math.min(max, currentVal));
+        const targetEl = picker.querySelector(`.wheel-item[data-val="${targetVal}"]`);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'instant', block: 'center' });
+          updateWheelSelection();
+        }
+        picker.addEventListener('scroll', updateWheelSelection, { passive: true });
       }, 50);
     }
 
-    function selectWheelValue(val) {
-      wheelValue = val;
-      document.querySelectorAll('.wheel-item').forEach(el => {
-        el.classList.toggle('selected', parseInt(el.dataset.val) === val);
+    function updateWheelSelection() {
+      const picker = document.getElementById('wheelPicker');
+      if (!picker) return;
+      const items = picker.querySelectorAll('.wheel-item');
+      const pickerRect = picker.getBoundingClientRect();
+      const centerY = pickerRect.top + pickerRect.height / 2;
+      let closest = null;
+      let closestDist = Infinity;
+      items.forEach(el => {
+        const elRect = el.getBoundingClientRect();
+        const elCenter = elRect.top + elRect.height / 2;
+        const dist = Math.abs(elCenter - centerY);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closest = el;
+        }
       });
+      items.forEach(el => el.classList.remove('selected'));
+      if (closest) closest.classList.add('selected');
     }
 
-    function confirmWheelValue(field) {
-      pendingJournal[field] = wheelValue;
-      
-      const today = new Date().toISOString().split('T')[0];
-      if (!journalData[today]) journalData[today] = {};
-      journalData[today][field] = wheelValue;
-      
-      saveLocal();
-      document.getElementById('modal').classList.remove('active');
-      renderContent();
-      showToast(`${field === 'sleep' ? 'Сон' : field === 'energy' ? 'Энергия' : 'Настроение'}: ${wheelValue}`);
+    function confirmWheelValue() {
+      const selected = document.querySelector('.wheel-item.selected');
+      if (!selected) return;
+      const val = parseInt(selected.dataset.val);
+      if (wheelField) {
+        pendingJournal[wheelField] = val;
+        const today = new Date().toISOString().split('T')[0];
+        if (!journalData[today]) journalData[today] = {};
+        journalData[today][wheelField] = val;
+        saveLocal();
+        document.getElementById('modal').classList.remove('active');
+        renderContent();
+        showToast(`${wheelField === 'sleep' ? 'Сон' : wheelField === 'energy' ? 'Энергия' : 'Настроение'}: ${val}`);
+        wheelField = null;
+      }
     }
 
     function saveJournalFromPending() {
@@ -1420,11 +1341,9 @@
       saveJournal(entry);
     }
 
-    // ===== ANALYTICS =====
     function renderStats(container) {
       let totalTasks = 0, doneTasks = 0, totalSleep = 0, sleepCount = 0;
       const categoryStats = {};
-
       Object.values(tasks).forEach(week => {
         Object.values(week).forEach(day => {
           day.forEach(t => {
@@ -1434,22 +1353,17 @@
           });
         });
       });
-
       Object.values(journalData).forEach(j => {
         if (j.sleep) { totalSleep += j.sleep; sleepCount++; }
       });
-
       const avgSleep = sleepCount > 0 ? (totalSleep / sleepCount).toFixed(1) : '-';
       const completionRate = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
-
       container.innerHTML = `
         <div class="analytics-header">
           <div class="big-number">${completionRate}%</div>
           <div class="label">Выполнено задач</div>
         </div>
-
         <div class="section-title">📊 Статистика</div>
-        
         <div class="stat-row">
           <div class="stat-icon blue">📋</div>
           <div class="stat-info">
@@ -1461,7 +1375,6 @@
           </div>
           <div class="stat-value">${totalTasks}</div>
         </div>
-
         <div class="stat-row">
           <div class="stat-icon green">😴</div>
           <div class="stat-info">
@@ -1473,7 +1386,6 @@
           </div>
           <div class="stat-value">${avgSleep}ч</div>
         </div>
-
         <div class="stat-row">
           <div class="stat-icon orange">⚡</div>
           <div class="stat-info">
@@ -1482,7 +1394,6 @@
           </div>
           <div class="stat-value">${Object.keys(journalData).length}</div>
         </div>
-
         <div class="section-title">📁 По категориям</div>
         <div class="category-grid">
           ${Object.entries(categoryStats).map(([cat, count]) => {
@@ -1503,10 +1414,9 @@
       if (currentScreen === 'journal' && Object.keys(pendingJournal).length > 0) {
         saveJournalFromPending();
       }
-      
       currentScreen = screen;
       document.querySelectorAll('.nav-item').forEach((el, i) => {
-        el.classList.toggle('active', 
+        el.classList.toggle('active',
           (screen === 'day' && i === 0) ||
           (screen === 'week' && i === 1) ||
           (screen === 'journal' && i === 2) ||
@@ -1528,7 +1438,6 @@
       const dayTasks = tasks[currentWeek]?.[selectedDay] || [];
       const task = dayTasks.find(t => t.id === taskId);
       if (!task) return;
-
       task.done = !task.done;
       saveLocal();
       toggleTask(taskId, task.done);
@@ -1551,15 +1460,12 @@
 
     function openAddTask() {
       selectedDaysForNewTask = [selectedDay];
-      
       openModal(`
         <div class="modal-title">➕ Новая задача</div>
-        
         <div class="input-group">
           <label>Название</label>
           <input type="text" id="taskText" placeholder="Что нужно сделать?">
         </div>
-        
         <div class="input-group">
           <label>Категория</label>
           <select id="taskCategory">
@@ -1570,7 +1476,6 @@
             <option value="other">📌 Другое</option>
           </select>
         </div>
-        
         <div class="input-group">
           <label>Тип</label>
           <select id="taskType" onchange="onTaskTypeChange()">
@@ -1579,29 +1484,25 @@
             <option value="weekly">📆 Еженедельная</option>
           </select>
         </div>
-        
         <div class="input-group" id="daysSelectorGroup">
           <label>Дни недели</label>
           <div class="day-selector" id="daySelector">
             ${[1,2,3,4,5,6,0].map(d => `
-              <div class="day-chip ${selectedDaysForNewTask.includes(d) ? 'selected' : ''}" 
+              <div class="day-chip ${selectedDaysForNewTask.includes(d) ? 'selected' : ''}"
                    onclick="toggleDayChip(${d})" data-day="${d}">
                 ${dayNames[d]}
               </div>
             `).join('')}
           </div>
         </div>
-        
         <button class="btn-primary" onclick="addTask()">Добавить задачу</button>
       `);
-      
       setTimeout(() => document.getElementById('taskText')?.focus(), 100);
     }
 
     function onTaskTypeChange() {
       const type = document.getElementById('taskType').value;
       const group = document.getElementById('daysSelectorGroup');
-      
       if (type === 'once') {
         group.style.display = 'none';
         selectedDaysForNewTask = [selectedDay];
@@ -1613,7 +1514,6 @@
     function toggleDayChip(day) {
       const chip = document.querySelector(`.day-chip[data-day="${day}"]`);
       if (!chip) return;
-      
       if (selectedDaysForNewTask.includes(day)) {
         selectedDaysForNewTask = selectedDaysForNewTask.filter(d => d !== day);
         chip.classList.remove('selected');
@@ -1627,12 +1527,10 @@
       const text = document.getElementById('taskText').value.trim();
       const category = document.getElementById('taskCategory').value;
       const type = document.getElementById('taskType').value;
-      
       if (!text) {
         showToast('Введите название задачи');
         return;
       }
-
       const task = {
         id: generateId(),
         text,
@@ -1641,22 +1539,14 @@
         done: false,
         days: selectedDaysForNewTask
       };
-
       console.log('[addTask] Creating for days:', selectedDaysForNewTask);
-
       if (!tasks[currentWeek]) tasks[currentWeek] = {};
-      
       for (const day of selectedDaysForNewTask) {
         if (!tasks[currentWeek][day]) tasks[currentWeek][day] = [];
-        tasks[currentWeek][day].push({
-          ...task,
-          id: task.id + '_' + day
-        });
+        tasks[currentWeek][day].push({ ...task, id: task.id + '_' + day });
       }
-
       saveLocal();
       await saveTask(task);
-      
       document.getElementById('modal').classList.remove('active');
       render();
     }
@@ -1676,17 +1566,14 @@
     async function updateTask(taskId) {
       const text = document.getElementById('editText').value.trim();
       if (!text) return;
-
       const dayTasks = tasks[currentWeek]?.[selectedDay] || [];
       const task = dayTasks.find(t => t.id === taskId);
       if (task) task.text = text;
-
       saveLocal();
       try {
         await supabaseRequest('tasks', 'PATCH', { text }, `id=eq.${taskId}`);
         showToast('Задача обновлена');
       } catch (e) {}
-
       document.getElementById('modal').classList.remove('active');
       render();
     }
@@ -1694,11 +1581,9 @@
     async function removeTask(taskId) {
       const dayTasks = tasks[currentWeek]?.[selectedDay] || [];
       tasks[currentWeek][selectedDay] = dayTasks.filter(t => t.id !== taskId);
-
       saveLocal();
       await deleteTask(taskId);
       showToast('Задача удалена');
-
       document.getElementById('modal').classList.remove('active');
       render();
     }
@@ -1706,38 +1591,62 @@
     function openSettings() {
       const morning = userSettings.notify_morning || '08:00';
       const evening = userSettings.notify_evening || '21:00';
-
+      const morningEnabled = userSettings.notify_morning_enabled !== false;
+      const eveningEnabled = userSettings.notify_evening_enabled !== false;
       openModal(`
         <div class="modal-title">⚙️ Настройки</div>
-        
         <div class="section-title">🔔 Уведомления</div>
         <div class="setting-row">
-          <div class="label">🌅 Утренние</div>
-          <input type="time" id="setMorning" value="${morning}" 
-            style="border:none;background:transparent;font-size:18px;font-weight:700;color:var(--link);">
+          <div class="label">
+            🌅 Утренние<br>
+            <span style="font-size:13px;color:var(--hint);font-weight:400">${morningEnabled ? 'Включены' : 'Выключены'}</span>
+          </div>
+          <div class="toggle ${morningEnabled ? 'active' : ''}" id="toggleMorning" onclick="toggleNotify('morning')"></div>
         </div>
         <div class="setting-row">
-          <div class="label">🌙 Вечерние</div>
-          <input type="time" id="setEvening" value="${evening}" 
-            style="border:none;background:transparent;font-size:18px;font-weight:700;color:var(--link);">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="label">🌅 Время утра</div>
+            <input type="time" id="setMorning" value="${morning}"
+              style="border:none;background:transparent;font-size:18px;font-weight:700;color:var(--link)">
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="label">
+            🌙 Вечерние<br>
+            <span style="font-size:13px;color:var(--hint);font-weight:400">${eveningEnabled ? 'Включены' : 'Выключены'}</span>
+          </div>
+          <div class="toggle ${eveningEnabled ? 'active' : ''}" id="toggleEvening" onclick="toggleNotify('evening')"></div>
+        </div>
+        <div class="setting-row">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="label">🌙 Время вечера</div>
+            <input type="time" id="setEvening" value="${evening}"
+              style="border:none;background:transparent;font-size:18px;font-weight:700;color:var(--link)">
+          </div>
         </div>
         <button class="btn-primary" onclick="saveNotificationSettings()">💾 Сохранить время</button>
-        
         <div class="section-title" style="margin-top:28px">💾 Данные</div>
         <button class="btn-secondary" onclick="exportData()">📤 Экспорт JSON</button>
         <button class="btn-secondary" onclick="importDataPrompt()">📥 Импорт JSON</button>
       `);
     }
 
+    function toggleNotify(type) {
+      const el = document.getElementById(type === 'morning' ? 'toggleMorning' : 'toggleEvening');
+      el.classList.toggle('active');
+    }
+
     async function saveNotificationSettings() {
       const morning = document.getElementById('setMorning').value;
       const evening = document.getElementById('setEvening').value;
-      
+      const morningEnabled = document.getElementById('toggleMorning').classList.contains('active');
+      const eveningEnabled = document.getElementById('toggleEvening').classList.contains('active');
       await saveSettings({
         notify_morning: morning,
-        notify_evening: evening
+        notify_evening: evening,
+        notify_morning_enabled: morningEnabled,
+        notify_evening_enabled: eveningEnabled
       });
-      
       document.getElementById('modal').classList.remove('active');
     }
 
@@ -1763,8 +1672,8 @@
         <div class="modal-title">📥 Импорт</div>
         <div class="input-group">
           <label>Вставь JSON</label>
-          <textarea id="importJson" placeholder='{"tasks":{...},"journal":{...}}' 
-            style="min-height:150px;font-family:monospace;font-size:12px;"></textarea>
+          <textarea id="importJson" placeholder='{"tasks":{...},"journal":{...}}'
+            style="min-height:150px;font-family:monospace;font-size:12px"></textarea>
         </div>
         <button class="btn-primary" onclick="importData()">📥 Загрузить</button>
       `);
@@ -1774,11 +1683,9 @@
       try {
         const json = document.getElementById('importJson').value;
         const data = JSON.parse(json);
-        
         if (data.tasks) tasks = data.tasks;
         if (data.journal) journalData = data.journal;
         if (data.settings) userSettings = data.settings;
-        
         saveLocal();
         render();
         showToast('Данные импортированы');
