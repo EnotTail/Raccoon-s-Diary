@@ -14,6 +14,7 @@
       --button: var(--tg-theme-button-color, #2481cc);
       --button-text: var(--tg-theme-button-text-color, #ffffff);
       --secondary-bg: var(--tg-theme-secondary-bg-color, #f5f5f5);
+      
       --cat-work: #4A90D9;
       --cat-health: #5CB85C;
       --cat-study: #F0AD4E;
@@ -564,7 +565,6 @@
     .journal-field.has-value .field-value { color: var(--text); }
     .journal-field.has-value .field-info .preview { color: var(--text); }
     
-    /* ===== FULLSCREEN EDITOR ===== */
     .editor-fullscreen {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -809,7 +809,7 @@
     </div>
   </div>
 
-  <!-- Fullscreen Editor -->
+  <!-- Полноэкранный редактор -->
   <div class="editor-fullscreen" id="editorFullscreen">
     <div class="editor-header">
       <span class="editor-title" id="editorTitle">Редактор</span>
@@ -854,7 +854,6 @@
 
     const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
     const fullDayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
-
     const fieldConfig = {
       lesson: { icon: '💡', title: 'Урок дня', placeholder: 'Чему научился сегодня?' },
       gratitude: { icon: '🙏', title: 'За что благодарен', placeholder: 'За что thankful?' },
@@ -970,41 +969,79 @@
       render();
     }
 
+    // ===== ИСПРАВЛЕННЫЙ syncFromServer — НЕ затирает localStorage =====
     async function syncFromServer() {
       if (!telegramId) return;
 
-      const tasksData = await supabaseRequest(
-        'tasks',
-        'GET',
-        null,
-        `telegram_id=eq.${telegramId}&week=eq.${currentWeek}&year=eq.${currentYear}`
-      );
+      console.log('[syncFromServer] Fetching week:', currentWeek, 'year:', currentYear);
 
-      if (tasksData) {
-        tasks[currentWeek] = tasks[currentWeek] || {};
-        for (let d = 0; d < 7; d++) tasks[currentWeek][d] = [];
-        
+      try {
+        const tasksData = await supabaseRequest(
+          'tasks',
+          'GET',
+          null,
+          `telegram_id=eq.${telegramId}&week=eq.${currentWeek}&year=eq.${currentYear}`
+        );
+
+        console.log('[syncFromServer] Got tasks:', tasksData?.length || 0);
+
+        // ⚠️ ГЛАВНОЕ: если Supabase пустой или ошибка — НЕ трогаем localStorage
+        if (!tasksData || tasksData.length === 0) {
+          console.log('[syncFromServer] Supabase empty for week', currentWeek, ', keeping local data');
+          return;
+        }
+
+        // Создаём неделю только если её ещё нет
+        if (!tasks[currentWeek]) {
+          tasks[currentWeek] = {};
+        }
+
+        // НЕ очищаем существующие дни — только мержим с сервером
         tasksData.forEach(t => {
           if (!tasks[currentWeek][t.day]) tasks[currentWeek][t.day] = [];
-          tasks[currentWeek][t.day].push({
-            id: t.id,
-            text: t.text,
-            done: t.done,
-            category: t.category,
-            type: t.type
-          });
+          
+          // Ищем существующую задачу по ID
+          const existingIndex = tasks[currentWeek][t.day].findIndex(existing => existing.id === t.id);
+          
+          if (existingIndex >= 0) {
+            // Обновляем существующую
+            tasks[currentWeek][t.day][existingIndex] = {
+              id: t.id,
+              text: t.text,
+              done: t.done,
+              category: t.category,
+              type: t.type
+            };
+          } else {
+            // Добавляем новую
+            tasks[currentWeek][t.day].push({
+              id: t.id,
+              text: t.text,
+              done: t.done,
+              category: t.category,
+              type: t.type
+            });
+          }
         });
+
+        console.log('[syncFromServer] Merged week', currentWeek, 'with', tasksData.length, 'tasks from server');
+
+      } catch (e) {
+        console.error('[syncFromServer] Error, keeping local data:', e);
+        return;
       }
 
-      const today = new Date().toISOString().split('T')[0];
-      const journalRes = await supabaseRequest(
-        'journal',
-        'GET',
-        null,
-        `telegram_id=eq.${telegramId}&date=eq.${today}`
-      );
-
-      if (journalRes && journalRes[0]) journalData[today] = journalRes[0];
+      // Журнал
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const journalRes = await supabaseRequest(
+          'journal',
+          'GET',
+          null,
+          `telegram_id=eq.${telegramId}&date=eq.${today}`
+        );
+        if (journalRes && journalRes[0]) journalData[today] = journalRes[0];
+      } catch (e) {}
 
       saveLocal();
     }
@@ -1255,24 +1292,21 @@
         </div>
 
         <div class="section-title">Заметки</div>
-        
-        <div class="journal-field" onclick="openEditor('lesson')">
+        <div class="journal-field ${display.lesson ? 'has-value' : ''}" onclick="openEditor('lesson')">
           <div class="field-icon" style="background:rgba(240,173,78,0.12)">💡</div>
           <div class="field-info">
             <div class="title">Урок дня</div>
             <div class="preview">${display.lesson || 'Нажми, чтобы написать...'}</div>
           </div>
         </div>
-        
-        <div class="journal-field" onclick="openEditor('gratitude')">
+        <div class="journal-field ${display.gratitude ? 'has-value' : ''}" onclick="openEditor('gratitude')">
           <div class="field-icon" style="background:rgba(155,89,182,0.12)">🙏</div>
           <div class="field-info">
             <div class="title">За что благодарен</div>
             <div class="preview">${display.gratitude || 'Нажми, чтобы написать...'}</div>
           </div>
         </div>
-        
-        <div class="journal-field" onclick="openEditor('notes')">
+        <div class="journal-field ${display.notes ? 'has-value' : ''}" onclick="openEditor('notes')">
           <div class="field-icon" style="background:rgba(74,144,217,0.12)">📝</div>
           <div class="field-info">
             <div class="title">Заметки</div>
@@ -1284,7 +1318,7 @@
       `;
     }
 
-    // ===== FULLSCREEN EDITOR =====
+    // ===== ПОЛНОЭКРАННЫЙ РЕДАКТОР =====
     function openEditor(field) {
       editorField = field;
       const cfg = fieldConfig[field];
@@ -1309,9 +1343,11 @@
       const value = document.getElementById('editorTextarea').value.trim();
       if (editorField) {
         pendingJournal[editorField] = value;
+        
         const today = new Date().toISOString().split('T')[0];
         if (!journalData[today]) journalData[today] = {};
         journalData[today][editorField] = value;
+        
         saveLocal();
         showToast('Сохранено');
         closeEditor();
@@ -1360,9 +1396,11 @@
 
     function confirmWheelValue(field) {
       pendingJournal[field] = wheelValue;
+      
       const today = new Date().toISOString().split('T')[0];
       if (!journalData[today]) journalData[today] = {};
       journalData[today][field] = wheelValue;
+      
       saveLocal();
       document.getElementById('modal').classList.remove('active');
       renderContent();
