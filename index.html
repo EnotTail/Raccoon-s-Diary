@@ -14,7 +14,6 @@
       --button: var(--tg-theme-button-color, #2481cc);
       --button-text: var(--tg-theme-button-text-color, #ffffff);
       --secondary-bg: var(--tg-theme-secondary-bg-color, #f5f5f5);
-      
       --cat-work: #4A90D9;
       --cat-health: #5CB85C;
       --cat-study: #F0AD4E;
@@ -427,7 +426,7 @@
       margin-top: 8px;
     }
     
-    /* ===== WHEEL PICKER (новое) ===== */
+    /* ===== WHEEL PICKER ===== */
     .wheel-picker {
       display: flex;
       justify-content: center;
@@ -489,7 +488,7 @@
       opacity: 0.3;
     }
     
-    /* ===== JOURNAL (исправлено) ===== */
+    /* ===== JOURNAL ===== */
     .journal-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -523,37 +522,102 @@
       margin-top: 4px;
     }
     
-    .journal-input {
+    .journal-field {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px;
       background: var(--secondary-bg);
-      border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 14px;
+      border-radius: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
       border: 2px solid transparent;
-      transition: border-color 0.2s;
     }
-    .journal-input:focus-within { border-color: rgba(36,129,204,0.2); }
-    .journal-input label { 
-      font-size: 13px; 
-      font-weight: 700;
-      color: var(--hint); 
-      display: block; 
-      margin-bottom: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .journal-field:active { transform: scale(0.98); background: rgba(0,0,0,0.06); }
+    .journal-field .field-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
     }
-    .journal-input textarea {
+    .journal-field .field-info { flex: 1; min-width: 0; }
+    .journal-field .field-info .title { font-size: 15px; font-weight: 600; }
+    .journal-field .field-info .preview {
+      font-size: 13px;
+      color: var(--hint);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .journal-field .field-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--link);
+      flex-shrink: 0;
+    }
+    .journal-field.has-value .field-value { color: var(--text); }
+    .journal-field.has-value .field-info .preview { color: var(--text); }
+    
+    /* ===== FULLSCREEN EDITOR ===== */
+    .editor-fullscreen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--bg);
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .editor-fullscreen.active { transform: translateY(0); }
+    .editor-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .editor-header .editor-title { font-size: 17px; font-weight: 700; }
+    .editor-header .editor-close {
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: var(--hint);
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+    .editor-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+    .editor-body textarea {
+      flex: 1;
       width: 100%;
       border: none;
       background: transparent;
       color: var(--text);
-      font-size: 16px;
+      font-size: 18px;
       font-family: inherit;
+      line-height: 1.7;
       resize: none;
-      min-height: 100px;
-      line-height: 1.6;
+      outline: none;
+      padding: 8px 0;
+    }
+    .editor-body textarea::placeholder { color: var(--hint); opacity: 0.6; }
+    .editor-footer {
+      padding: 16px;
+      border-top: 1px solid rgba(0,0,0,0.05);
     }
     
-    /* ===== ANALYTICS (новый дизайн) ===== */
+    /* ===== ANALYTICS ===== */
     .analytics-header {
       text-align: center;
       padding: 20px;
@@ -745,6 +809,20 @@
     </div>
   </div>
 
+  <!-- Fullscreen Editor -->
+  <div class="editor-fullscreen" id="editorFullscreen">
+    <div class="editor-header">
+      <span class="editor-title" id="editorTitle">Редактор</span>
+      <button class="editor-close" onclick="closeEditor()">✕</button>
+    </div>
+    <div class="editor-body">
+      <textarea id="editorTextarea" placeholder="Введите..."></textarea>
+    </div>
+    <div class="editor-footer">
+      <button class="btn-primary" onclick="saveEditorField()">💾 Сохранить</button>
+    </div>
+  </div>
+
   <script>
     const CONFIG = {
       SUPABASE_URL: 'https://rayhnludfxhzeaacjfco.supabase.co',
@@ -772,9 +850,16 @@
     let userSettings = {};
     let selectedDaysForNewTask = [selectedDay];
     let pendingJournal = {};
+    let editorField = null;
 
     const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
     const fullDayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+
+    const fieldConfig = {
+      lesson: { icon: '💡', title: 'Урок дня', placeholder: 'Чему научился сегодня?' },
+      gratitude: { icon: '🙏', title: 'За что благодарен', placeholder: 'За что thankful?' },
+      notes: { icon: '📝', title: 'Заметки', placeholder: 'Мысли, идеи...' }
+    };
 
     function getWeekNumber(d) {
       d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
@@ -1142,68 +1227,99 @@
       }
     }
 
-    // ===== JOURNAL (исправлено: автосохранение + скролл) =====
+    // ===== JOURNAL =====
     function renderJournal(container) {
       const today = new Date().toISOString().split('T')[0];
       const entry = journalData[today] || {};
-      pendingJournal = { ...entry };
+      const display = { ...entry, ...pendingJournal };
 
       container.innerHTML = `
         <div class="section-title">Сегодня, ${formatDate(new Date())}</div>
         
         <div class="journal-grid">
           <div class="journal-card" onclick="openWheelPicker('sleep', 'Сон (часы)', 0, 12)">
-            <div class="value">${entry.sleep ?? '-'}</div>
+            <div class="value">${display.sleep ?? '-'}</div>
             <div class="label">😴 Сон</div>
             <div class="range-hint">0–12 ч</div>
           </div>
           <div class="journal-card" onclick="openWheelPicker('energy', 'Энергия', 1, 10)">
-            <div class="value">${entry.energy ?? '-'}</div>
+            <div class="value">${display.energy ?? '-'}</div>
             <div class="label">⚡ Энергия</div>
             <div class="range-hint">1–10</div>
           </div>
           <div class="journal-card" onclick="openWheelPicker('mood', 'Настроение', 1, 10)">
-            <div class="value">${entry.mood ?? '-'}</div>
+            <div class="value">${display.mood ?? '-'}</div>
             <div class="label">😊 Настроение</div>
             <div class="range-hint">1–10</div>
           </div>
         </div>
 
-        <div class="journal-input">
-          <label>💡 Урок дня</label>
-          <textarea id="jLesson" placeholder="Чему научился сегодня?" oninput="autoSaveJournalField('lesson', this.value)">${entry.lesson || ''}</textarea>
+        <div class="section-title">Заметки</div>
+        
+        <div class="journal-field" onclick="openEditor('lesson')">
+          <div class="field-icon" style="background:rgba(240,173,78,0.12)">💡</div>
+          <div class="field-info">
+            <div class="title">Урок дня</div>
+            <div class="preview">${display.lesson || 'Нажми, чтобы написать...'}</div>
+          </div>
         </div>
-        <div class="journal-input">
-          <label>🙏 За что благодарен</label>
-          <textarea id="jGratitude" placeholder="За что thankful?" oninput="autoSaveJournalField('gratitude', this.value)">${entry.gratitude || ''}</textarea>
+        
+        <div class="journal-field" onclick="openEditor('gratitude')">
+          <div class="field-icon" style="background:rgba(155,89,182,0.12)">🙏</div>
+          <div class="field-info">
+            <div class="title">За что благодарен</div>
+            <div class="preview">${display.gratitude || 'Нажми, чтобы написать...'}</div>
+          </div>
         </div>
-        <div class="journal-input">
-          <label>📝 Заметки</label>
-          <textarea id="jNotes" placeholder="Мысли, идеи..." oninput="autoSaveJournalField('notes', this.value)">${entry.notes || ''}</textarea>
+        
+        <div class="journal-field" onclick="openEditor('notes')">
+          <div class="field-icon" style="background:rgba(74,144,217,0.12)">📝</div>
+          <div class="field-info">
+            <div class="title">Заметки</div>
+            <div class="preview">${display.notes || 'Нажми, чтобы написать...'}</div>
+          </div>
         </div>
 
         <button class="btn-primary" onclick="saveJournalFromPending()">💾 Сохранить дневник</button>
       `;
     }
 
-    function autoSaveJournalField(field, value) {
-      pendingJournal[field] = value;
-    }
-
-    async function saveJournalFromPending() {
+    // ===== FULLSCREEN EDITOR =====
+    function openEditor(field) {
+      editorField = field;
+      const cfg = fieldConfig[field];
       const today = new Date().toISOString().split('T')[0];
-      const entry = {
-        sleep: pendingJournal.sleep ?? journalData[today]?.sleep ?? null,
-        energy: pendingJournal.energy ?? journalData[today]?.energy ?? null,
-        mood: pendingJournal.mood ?? journalData[today]?.mood ?? null,
-        lesson: pendingJournal.lesson || '',
-        gratitude: pendingJournal.gratitude || '',
-        notes: pendingJournal.notes || ''
-      };
-      await saveJournal(entry);
+      const currentValue = pendingJournal[field] ?? journalData[today]?.[field] ?? '';
+      
+      document.getElementById('editorTitle').textContent = cfg.title;
+      const ta = document.getElementById('editorTextarea');
+      ta.value = currentValue;
+      ta.placeholder = cfg.placeholder;
+      
+      document.getElementById('editorFullscreen').classList.add('active');
+      setTimeout(() => ta.focus(), 100);
     }
 
-    // ===== WHEEL PICKER (новое) =====
+    function closeEditor() {
+      document.getElementById('editorFullscreen').classList.remove('active');
+      editorField = null;
+    }
+
+    function saveEditorField() {
+      const value = document.getElementById('editorTextarea').value.trim();
+      if (editorField) {
+        pendingJournal[editorField] = value;
+        const today = new Date().toISOString().split('T')[0];
+        if (!journalData[today]) journalData[today] = {};
+        journalData[today][editorField] = value;
+        saveLocal();
+        showToast('Сохранено');
+        closeEditor();
+        renderContent();
+      }
+    }
+
+    // ===== WHEEL PICKER =====
     let wheelValue = 5;
 
     function openWheelPicker(field, label, min, max) {
@@ -1229,7 +1345,6 @@
         <button class="btn-primary" onclick="confirmWheelValue('${field}')">Сохранить</button>
       `);
 
-      // Прокрутка к выбранному
       setTimeout(() => {
         const selected = document.querySelector('.wheel-item.selected');
         if (selected) selected.scrollIntoView({ behavior: 'instant', block: 'center' });
@@ -1245,12 +1360,29 @@
 
     function confirmWheelValue(field) {
       pendingJournal[field] = wheelValue;
+      const today = new Date().toISOString().split('T')[0];
+      if (!journalData[today]) journalData[today] = {};
+      journalData[today][field] = wheelValue;
+      saveLocal();
       document.getElementById('modal').classList.remove('active');
       renderContent();
       showToast(`${field === 'sleep' ? 'Сон' : field === 'energy' ? 'Энергия' : 'Настроение'}: ${wheelValue}`);
     }
 
-    // ===== ANALYTICS (новый дизайн) =====
+    function saveJournalFromPending() {
+      const today = new Date().toISOString().split('T')[0];
+      const entry = {
+        sleep: pendingJournal.sleep ?? journalData[today]?.sleep ?? null,
+        energy: pendingJournal.energy ?? journalData[today]?.energy ?? null,
+        mood: pendingJournal.mood ?? journalData[today]?.mood ?? null,
+        lesson: pendingJournal.lesson || '',
+        gratitude: pendingJournal.gratitude || '',
+        notes: pendingJournal.notes || ''
+      };
+      saveJournal(entry);
+    }
+
+    // ===== ANALYTICS =====
     function renderStats(container) {
       let totalTasks = 0, doneTasks = 0, totalSleep = 0, sleepCount = 0;
       const categoryStats = {};
@@ -1330,6 +1462,10 @@
     }
 
     function setScreen(screen) {
+      if (currentScreen === 'journal' && Object.keys(pendingJournal).length > 0) {
+        saveJournalFromPending();
+      }
+      
       currentScreen = screen;
       document.querySelectorAll('.nav-item').forEach((el, i) => {
         el.classList.toggle('active', 
@@ -1368,7 +1504,6 @@
 
     function closeModal(e) {
       if (e.target === e.currentTarget) {
-        // Автосохранение дневника при закрытии модалки
         if (currentScreen === 'journal' && Object.keys(pendingJournal).length > 0) {
           saveJournalFromPending();
         }
